@@ -80,8 +80,30 @@ video_maxlen: 32                        # ★ P25: 默认 128 帧会撑爆 cutof
 #   batch=8 (accum 3, global 168): 22-27 s/step -> 吞吐 7.0  样本/s -> 全量约 31.7h
 #   实测 batch=8 显存峰值 34 GB / 46 GB, **0 次 OOM**
 #   代价: global batch 从 PLAN 原定的 128 升到 168 (+31%), 学习动态会略有不同
-per_device_train_batch_size: 8
-gradient_accumulation_steps: 3          # global batch = 8 × 3 × 7 = 168
+# ★★ 2026-09-27 07:15 事故后改: batch 8 → 2, accum 3 → 12 (global 仍 168) ★★
+#   原因: step 1016 时 CUDA OOM 挂了 —— 不是 host 内存, 是**显存**:
+#     rank3: Tried to allocate 13.44 GiB, GPU 3 capacity 44.39 GiB, 5.86 GiB free
+#           (进程已占 38.52 GiB; reserved-but-unallocated 只 172 MiB ⇒ 不是碎片)
+#   13.44 GiB 是 loss 里 **logits 的 fp32 上采样**: ForCausalLMLoss 第一行就是
+#     `logits = logits.float()`, 大小 = batch × 序列长 × 词表 152064 × 4 字节
+#     = 8 × ~2960 × 152064 × 4 ≈ 13.4 GiB ✓ 数字完全对上。
+#   为什么会有 2960 token 的 batch: 实测 399,593 条的真实长度
+#     (scripts/training/measure_seq_len.py):
+#       均值 537 / p50 497 / p95 819 / p99 958 / **p100 4096**
+#     随机 batch=8 的"batch 内最长"均值才 796 (→ fp32 logits 3.6 GiB, 完全正常),
+#     但只要**混进一条几千 token 的离群长样本**, padding 会把它拉满 8 条
+#     → 8 × 2960 → 13.4 GiB → 必死。**这是结构性缺陷, 不是运气。**
+#     最坏情况 (batch 内有一条 4096): batch 8 → fp32 logits 18.6 GiB → 总需求 ~52 GiB ❌
+#   为什么选 batch 2 而不是 4:
+#     batch 4 的最坏情况 = 9.3 GiB → 总需求 ~45 GiB, 贴着 44.39 GiB 上限 ⚠️ (还会复发)
+#     batch 2 的最坏情况 = 4.6 GiB → 总需求 ~37 GiB ✅ 余量 7 GiB
+#   为什么 batch 2 不吃亏: 微 batch 越小, "batch 内最长"越短 (8 条 796 vs 2 条 ~650),
+#     同样 168 样本的 padding 总量反而少 ~18%。
+#   ✅ global batch 仍是 2 × 12 × 7 = 168 —— 训练协议零改变。
+#   ✅ 这两个字段都在 HF TrainingArguments 里, **_不会_ 让 4 小时 tokenize 缓存失效**
+#      (见下面 P39 那条注释)。
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 12         # global batch = 2 × 12 × 7 = 168
 learning_rate: 1.0e-5
 num_train_epochs: 2.0                   # ★ R6
 lr_scheduler_type: cosine
