@@ -1,0 +1,124 @@
+# ============================================================================
+# SFT —— 7 卡版本 (GPU 0-6 全部, 已获用户授权)
+# ----------------------------------------------------------------------------
+# 与 3 卡版 (sft_qwen2vl_2b_3gpu.yaml) / PLAN 的 4×L40 原方案的关系:
+#   PLAN 原定:  per_device 4 × accum 8  × 4 卡 = global 128
+#   3 卡版:     per_device 4 × accum 11 × 3 卡 = global 132
+#   本 7 卡版:  per_device 4 × accum 5  × 7 卡 = global 140  ← 最接近 128
+# 其余超参完全照 PLAN §8.1, 保证三个方案之间可比。
+#
+# 预计耗时: ~10 小时 (3 卡实测 13.9 s/优化步 → 7 卡外推; 见 docs/exp/EXP-003)
+#
+# 用法:
+#   CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6 NPROC=7 FORCE_TORCHRUN=1 \
+#     bash scripts/train/launch_4xl40.sh sft
+# ============================================================================
+
+model_name_or_path: models/Qwen2-VL-2B-Instruct
+template: qwen2_vl
+trust_remote_code: true
+
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true               # ★ R6: 冻结视觉编码器 (ViT)
+freeze_multi_modal_projector: false     # ★ D3: merger 保持可训练
+
+### 数据
+dataset: postrain_sft                   # -> data/processed/sft_400k.clean.jsonl
+dataset_dir: configs
+cutoff_len: 4096                        # ★ P24: 2048 装不下长样本, 会 shape mismatch
+max_samples: null
+overwrite_cache: false
+preprocessing_num_workers: 16          # ★ 2026-09-26: **不要改这个数**
+                                        #   datasets 的 map 缓存文件名里带 worker 数
+                                        #   (cache-<fp>_000NN_of_00016.arrow), 一改就 miss,
+                                        #   tokenize 要重跑 4 小时。已有的缓存在
+                                        #   cache/hf/datasets/json/default-3d379ea0a8bd3d7f/
+dataloader_num_workers: 1               # ★ 2026-09-26 实测: 8 -> 1, OOM 的真正解药
+                                        #   原值 8 × 7 卡 = 56 个 worker 进程。容器内存上限只有
+                                        #   64GiB (宿主机 503GB, 但 cgroup 卡死在这里), 而
+                                        #   worker fork 后 COW 会逐步私有化 rank 里的数据集,
+                                        #   匿名内存单调上涨, 最终 SIGKILL。
+                                        #   实测三种取值 (logs/diag/mem_trace*.log):
+                                        #     8 → 基线一路涨到 65.5GB 顶死, step 27 崩
+                                        #     2 → 基线 47GB 且仍在爬, 峰值仍会撞上限
+                                        #     1 → 基线 32.5GB **走平**, 保存尖峰后峰值 54GB ✓
+                                        #   另: 每次存 checkpoint 要物化 ZeRO-2 的 optimizer
+                                        #   state, **+22GB 尖峰** (诊断#3 就是死在这一下)。
+                                        #   所以省 host 内存是**保命**, 不是优化:
+                                        #   基线 32.5 + 尖峰 22 = 54GB < 64GB。
+                                        #   代价: 12.2 s/it (worker=2 时 10.4) ≈ 慢 15%。
+                                        #   ⚠️ 省的是 host 内存, 不是显存 —— 显存峰值
+                                        #   34/46GB, 全程 0 次 CUDA OOM。
+
+### ⚠️ 关于 tokenize 缓存的指纹规则 (2026-09-26 实测, 血泪)
+#   datasets 的 map 指纹 = dill.dumps(transform) + 输入数据集指纹, 而 transform 是
+#   绑定方法 `dataset_processor.preprocess_dataset` —— dill 会把整个处理器实例
+#   (含 **全部 data_args**) 序列化进去。
+#   ⇒ **任何 data_args 字段变动都会让 4 小时的 tokenize 缓存失效**
+#      (preprocessing_num_workers / cutoff_len / image_max_pixels / video_maxlen /
+#       tokenized_path / dataset ... 改一个就要重跑 4 小时)
+#   ⇒ 而 dataloader_num_workers 在 HF 的 Seq2SeqTrainingArguments 里, 不在
+#      data_args 中 (LLaMA-Factory 的 hparams/ 无此字段, processor 也不持有
+#      training_args), 所以**调它不影响缓存** —— 这正是下面 8→2 能放心改的原因。
+#   佐证: 22:34 那次诊断(参数与原始跑批完全一致) 2 分钟就进训练 = 命中;
+#         22:47 那次只多了 tokenized_path, 就从头重跑 tokenize。
+#   ✗ 曾经试过 tokenized_path (可让数据集走 mmap, 省 ~10GB 匿名内存), 但它会
+#     触发 4 小时重跑, 性价比不划算, 撤掉。
+
+### 视觉输入 (★ 这两个参数直接决定显存与 token 数, 见 docs/02)
+image_max_pixels: 262144                # 512×512 ≈ 324 visual tokens/图
+image_min_pixels: 1024
+video_max_pixels: 16384
+video_fps: 2.0
+video_maxlen: 32                        # ★ P25: 默认 128 帧会撑爆 cutoff_len
+
+### 批与优化
+# ★ 2026-09-26 实测调优: batch 4 → 8
+#   batch=4 (accum 5, global 140): 22.29 s/step -> 吞吐 6.28 样本/s -> 全量约 35.4h
+#   batch=8 (accum 3, global 168): 22-27 s/step -> 吞吐 7.0  样本/s -> 全量约 31.7h
+#   实测 batch=8 显存峰值 34 GB / 46 GB, **0 次 OOM**
+#   代价: global batch 从 PLAN 原定的 128 升到 168 (+31%), 学习动态会略有不同
+per_device_train_batch_size: 8
+gradient_accumulation_steps: 3          # global batch = 8 × 3 × 7 = 168
+learning_rate: 1.0e-5
+num_train_epochs: 2.0                   # ★ R6
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+weight_decay: 0.0
+max_grad_norm: 1.0
+optim: adamw_torch
+bf16: true
+gradient_checkpointing: true
+
+### 分布式
+deepspeed: configs/ds_zero2.json        # ★ R5: ZeRO-2
+ddp_timeout: 180000000
+
+### 日志与存档
+output_dir: results/checkpoints/sft
+logging_steps: 5
+save_steps: 100000                      # ★ 2026-09-27: **故意大于总步数 (4758) = 不存周期 checkpoint**
+                                        #   实测 (logs/diag/mem_trace*.log, results/watch/):
+                                        #   存一次 checkpoint 会让 7 个 rank **各自**物化一份
+                                        #   state_dict —— 只存模型 +20GB, 连 DS optimizer
+                                        #   state 一起存 +26GB (23GB 分片全经过主机内存),
+                                        #   而且**不归还** (MALLOC_ARENA_MAX / TRIM / MMAP
+                                        #   三个旋钮都试过, 无效)。
+                                        #   64GiB 上限下的账:
+                                        #     基线 35GB + 第 1 次保存 = 55~61GB  ← 刚好活
+                                        #     基线 55GB + 第 2 次保存 = 75GB+     ← SIGKILL
+                                        #   (已实测两次崩溃: worker=8 死在 step 27 漂移,
+                                        #    worker=1 死在 step 200 第二次保存)
+                                        #   ⚠️ 关键推论: **中途任何一次保存都会永久抬高基线,
+                                        #   从而毒死最后一次保存** —— 所以中途一次都不能存,
+                                        #   连 save_only_model 那种小保存也不行 (实测照样 +20GB)。
+                                        #   收尾时 LLaMA-Factory 无条件调 trainer.save_model()
+                                        #   (train/sft/workflow.py:122), 只存模型 (~+20GB),
+                                        #   产出 results/checkpoints/sft/model.safetensors ——
+                                        #   DPO 阶段的 model_name_or_path 就是它。
+                                        #   ⚠️ 代价: 中途崩 = 没有任何存档可续, 17 小时全丢。
+save_total_limit: 3
+plot_loss: true
+report_to: none

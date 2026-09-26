@@ -1,0 +1,38 @@
+# 权重与大数据 —— 不进 git
+models/
+data/raw/
+data/processed/
+third_party/
+results/checkpoints/
+results/eval/
+.cache/
+.run/
+
+# 环境
+.venv/
+.venv-*/
+.tools/
+*.egg-info/
+__pycache__/
+*.py[cod]
+
+# 训练产物 —— 会撑爆仓库
+# ★ 2026-09-27 补: 下面这五个原来漏了, 合计 115GB (smoke 54G / calib 33G /
+#   ckpt_backup 28G), 其中还有 4.4GB 的 model.safetensors —— GitHub 单文件
+#   超 100MB 直接拒收, 会把整个 push 卡死。
+results/smoke/
+results/calib/
+results/ckpt_backup/
+results/watch/
+results/diag/
+
+# 日志与临时
+logs/*.log
+logs/**/*.log
+*.tmp
+*.incomplete
+*.pid
+
+# 保留: data/samples/ (小样本, 供 code review 与烟测)
+!data/samples/
+!data/manifests/

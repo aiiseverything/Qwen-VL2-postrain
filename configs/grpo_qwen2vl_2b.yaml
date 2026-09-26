@@ -1,0 +1,134 @@
+# ============================================================================
+# GRPO / RLVR —— EasyR1 (verl)
+# ----------------------------------------------------------------------------
+# ⚠️ 本文件已按 **EasyR1 的真实 schema** 重写 (见 docs/05 问题 P31)。
+#    初版是照着 PLAN §8.3 手写的, 里面**有 8 个 key 在 EasyR1 里根本不存在**
+#    （`norm_adv_by_std_in_grpo` / `clip_grad` / `worker.actor.fsdp: null` /
+#      `worker.ref.model` / `worker.reward` / `algorithm.adv_estimator: grpo` 写法等），
+#    一跑就 merge 硬失败。
+#    真实 schema 以 third_party/EasyR1/examples/config.yaml 为准, 本文件按其字段逐项对齐。
+#
+# 需求对应: R8 (GRPO 训 200 step)
+# 风险 K3: EasyR1 的 examples/ 下**没有 Qwen2-VL 的示例**（只有 Qwen2.5-VL/3-VL）,
+#          本配置属"支持但未重点验证"路径, 上机先冒烟。
+#
+# 启动方式（注意是 `config=` 点列表语法, 不是 --config）:
+#   PYTHONPATH=third_party/EasyR1 .venv-rl/bin/python -m verl.trainer.main \
+#       config=configs/grpo_qwen2vl_2b.yaml
+# ============================================================================
+
+data:
+  # EasyR1 的 RLHFDataset 支持三种 data_path:
+  #   (a) HF repo@split  (b) 本地目录  (c) **本地文件** ← 我们用这个
+  train_files: data/processed/rlvr/geoqa_r1v.parquet     # 8,031 条
+  val_files: data/processed/rlvr/geometry3k.parquet      # 2,101 条 (冒烟/验证)
+  prompt_key: problem
+  answer_key: answer
+  image_key: images
+  video_key: videos
+  image_dir: null
+  max_prompt_length: 2048
+  max_response_length: 1024          # 几何题答案短; 2B 模型不需要长输出
+  rollout_batch_size: 128
+  mini_rollout_batch_size: null
+  val_batch_size: 32
+  # ★ K8: **不**强制 <think></think> CoT 格式。
+  #   在 Qwen2-VL-2B 上强制 CoT 格式奖励会掉分 (R1-V 作者自述)。
+  #   如需消融, 改成 ./third_party/EasyR1/examples/format_prompt/r1v.jinja
+  format_prompt: null
+  override_chat_template: null
+  shuffle: true
+  seed: 42
+  min_pixels: 262144
+  max_pixels: 262144                # 与 SFT/DPO 保持一致 (512x512)
+  filter_overlong_prompts: true
+
+algorithm:
+  adv_estimator: grpo
+  disable_kl: false
+  use_kl_loss: true
+  kl_penalty: low_var_kl
+  kl_coef: 1.0e-2                   # ★ PLAN §8.3
+  online_filtering: false
+  filter_key: overall
+  filter_low: 0.01
+  filter_high: 0.99
+
+worker:
+  actor:
+    global_batch_size: 128          # ★ PLAN §8.3
+    micro_batch_size_per_device_for_update: 1
+    micro_batch_size_per_device_for_experience: 1
+    max_grad_norm: 1.0
+    padding_free: true
+    dynamic_batching: true
+    ulysses_size: 1
+    model:
+      model_path: results/checkpoints/dpo    # ★ PLAN §8.3: 基于 DPO 产物
+      enable_gradient_checkpointing: true
+      trust_remote_code: true
+      freeze_vision_tower: true              # 与 SFT/DPO 一致
+      lora:
+        rank: 0                              # 0 = 全参
+        alpha: 64
+        target_modules: all-linear
+        exclude_modules: .*visual.*
+    optim:
+      lr: 1.0e-6                             # ★ PLAN §8.3
+      weight_decay: 1.0e-2
+      strategy: adamw
+      lr_warmup_ratio: 0.0
+    fsdp:
+      enable_full_shard: true
+      enable_cpu_offload: false              # 3 张 46GB 卡, 不必 offload 到 CPU
+      enable_rank0_init: true
+    offload:
+      offload_params: true
+      offload_optimizer: true
+
+  rollout:
+    n: 5                                     # ★ PLAN §8.3: 每 prompt 采 5 条
+    temperature: 1.0
+    top_p: 1.0
+    limit_images: 1                          # 我们的 RLVR 每条 1 张图
+    gpu_memory_utilization: 0.6
+    enforce_eager: false
+    enable_chunked_prefill: false
+    tensor_parallel_size: 1                  # 3 卡用 TP1 (每卡一份 rollout 引擎)
+    disable_tqdm: false
+    val_override_config:
+      temperature: 0.6
+      top_p: 0.95
+      n: 1
+
+  ref:
+    fsdp:
+      enable_full_shard: true
+      enable_cpu_offload: true
+      enable_rank0_init: true
+    offload:
+      offload_params: false
+
+  reward:
+    # 本项目的奖励函数: 答案精确匹配为主, 格式奖励默认关闭 (K8)
+    reward_function: configs/reward_geo.py:compute_score
+
+trainer:
+  total_epochs: 15
+  max_steps: 200                    # ★ R8: GRPO 训 200 step
+  project_name: postrain_grpo
+  experiment_name: qwen2vl2b_geoqa
+  logger: ["file"]                  # 改成 ["file","wandb"] 需配 WANDB_API_KEY
+  nnodes: 1
+  n_gpus_per_node: 7                # ★ 本机可用 0-6 七张 (已获用户授权)
+  max_try_make_batch: 20
+  val_freq: 50
+  val_before_train: true
+  val_only: false
+  val_generations_to_log: 3
+  save_freq: 50
+  save_limit: 3
+  save_model_only: false
+  save_checkpoint_path: results/checkpoints/grpo
+  load_checkpoint_path: null
+  find_last_checkpoint: true

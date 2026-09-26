@@ -1,0 +1,55 @@
+# ============================================================================
+# DPO 阶段 —— LLaMA-Factory
+# 严格按 PLAN §8.2 编写 (用户指令: 严格照 PLAN 的 4×L40 写)
+# 需求对应: R7 (基于 SFT checkpoint, 1 epoch)
+# ⚠️ DPO 需同时载入 policy + reference 两个模型, 显存约为 SFT 的 2 倍
+# ============================================================================
+
+### 模型 —— 基于 SFT 产物
+model_name_or_path: results/checkpoints/sft     # ★ R7
+template: qwen2_vl
+trust_remote_code: true
+
+### 训练阶段
+stage: dpo
+do_train: true
+finetuning_type: full
+pref_beta: 0.1                          # KL 约束强度
+pref_loss: sigmoid                      # 经典 DPO 损失 (非 ipo/orpo)
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+
+### 数据
+dataset: postrain_dpo                   # -> data/processed/dpo_10k.jsonl
+dataset_dir: configs
+cutoff_len: 4096
+preprocessing_num_workers: 8
+dataloader_num_workers: 4
+
+### 视觉输入
+image_max_pixels: 262144
+image_min_pixels: 1024
+
+### 批与优化
+per_device_train_batch_size: 1          # DPO 显存吃紧, 单卡 1 条
+gradient_accumulation_steps: 16         # global batch = 1 × 16 × 4 卡 = 64
+learning_rate: 5.0e-7                   # ★ 远低于 SFT —— DPO 对 lr 极敏感 (docs/02)
+num_train_epochs: 1.0                   # ★ R7
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+max_grad_norm: 1.0
+optim: adamw_torch
+bf16: true
+gradient_checkpointing: true
+
+### 分布式
+deepspeed: configs/ds_zero2.json
+ddp_timeout: 180000000
+
+### 日志与存档
+output_dir: results/checkpoints/dpo
+logging_steps: 5
+save_steps: 200
+save_total_limit: 3
+plot_loss: true
+report_to: none

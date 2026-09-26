@@ -1,0 +1,163 @@
+# ============================================================================
+# Postrain 数据清单 (Dataset Manifest)
+# ----------------------------------------------------------------------------
+# 生成日期: 2026-09-21
+# 所有 ID 均在**本机实测**核实 (curl https://huggingface.co/api/...)，见 docs/05 附录。
+#
+# ⚠️ 核心事实: LLaVA-Instruct-150K / ShareGPT4V / VideoInstruct-100K
+#    **只含标注 JSON，不含图像/视频本体**。图像需从上游数据集单独下载；
+#    视频需从 YouTube 按 video_id 抓取。详见 docs/05-下载准备搭建记录.md 问题 P1/P2。
+# ============================================================================
+
+project:
+  name: postrain
+  base_model: Qwen/Qwen2-VL-2B-Instruct
+  created: "2026-09-21"
+
+# ---------------------------------------------------------------------------
+# SFT —— 目标 400,000 条
+# ---------------------------------------------------------------------------
+# 抽取决策依据: 见 docs/05 第 4 节「40 万条如何抽取」。
+# 原则: 只选**图像可实际获取**的来源; ocr_vqa 因上游 ~250GB 且需逐图匹配而剔除。
+sft:
+  target_total: 400000
+  sources:
+    - name: llava665k
+      hf_id: liuhaotian/LLaVA-Instruct-150K
+      annotation: data/raw/annotations/llava_v1_5_mix665k.json
+      file_in_repo: llava_v1_5_mix665k.json
+      n_records: 665298          # 实测
+      quota: 220000
+      license: CC-BY-4.0 (受 OpenAI 条款约束)
+      risk: medium
+      notes: >
+        实测 665,298 条中: 40,688 条为**纯文本 ShareGPT 对话(无 image 键)**,
+        80,000 条为 ocr_vqa。两者均已排除在抽取池外。
+      image_sources: [coco, gqa, textvqa, vg]
+
+    - name: sharegpt4v
+      hf_id: Lin-Chen/ShareGPT4V
+      annotation_used: data/raw/annotations/sharegpt4v_instruct_gpt4-vision_cap100k.json
+      file_in_repo: sharegpt4v_instruct_gpt4-vision_cap100k.json
+      n_records: 102025          # 实测
+      quota: 80000
+      license: CC-BY-NC-4.0
+      risk: HIGH                 # ⚠️ 禁止商用
+      notes: >
+        取 coco(50,027) + llava(30,000) 共 80,027 条 —— 这两组图像可由
+        COCO train2017 提供。sam/wikiart/web-* 等 21,998 条需 ShareGPT4V
+        自建图像包，暂不纳入配额。
+
+    - name: videoinstruct100k
+      hf_id: MBZUAI/VideoInstruct-100K
+      annotation: data/raw/annotations/VideoInstruct100K.json
+      n_records: 100010          # 实测 100,010 turn / 13,303 个唯一视频
+      quota: 100000
+      license: CC-BY-SA-4.0
+      risk: medium
+      filter: "视频时长 < 3 分钟"
+      notes: >
+        video_id 形如 v_k_ZXmr8pmrs —— 实为 **YouTube ID**(ActivityNet 命名约定)。
+        10 万条 turn 只对应 13,303 个唯一视频，故按视频去重后抓取即可覆盖。
+        视频需 yt-dlp 抓取，失败/超时长/已下架的会自动剔除并在 stats 中披露。
+
+# ---------------------------------------------------------------------------
+# DPO —— 目标 10,000 偏好对
+# ---------------------------------------------------------------------------
+dpo:
+  target_total: 10000
+  sources:
+    - name: rlhfv
+      hf_id: openbmb/RLHF-V-Dataset
+      file_in_repo: RLHF-V-Dataset.parquet
+      license: CC-BY-NC-4.0          # ⚠️ 实测 dataset card 为 cc-by-nc-4.0 (非 Apache)
+      risk: HIGH                     # ⚠️ 禁止商用
+      n_records: 5733
+      notes: >
+        细粒度人工修正的幻觉偏好对。注意: 常见旧 ID HaoyeZhang/RLHF-V-Dataset 已 307
+        迁移至此。`text` 字段内含 {question, chosen, rejected}; image 以 bytes 内嵌。
+
+    - name: llava_rlhf
+      hf_id: zhiqings/LLaVA-RLHF-Data
+      license: CC-BY-NC-4.0
+      risk: HIGH                 # ⚠️ 禁止商用
+      notes: 用于补足到 1 万条。
+
+# ---------------------------------------------------------------------------
+# RLVR —— GRPO 200 step
+# ---------------------------------------------------------------------------
+rlvr:
+  sources:
+    - name: geometry3k
+      hf_id: hiyouga/geometry3k
+      license: MIT
+      risk: low
+      role: 冒烟 —— EasyR1 官方示例数据，最快跑通管线
+      n_train: 2101
+    - name: geoqa_r1v
+      hf_id: leonardPKU/GEOQA_R1V_Train_8K
+      license: apache-2.0
+      risk: low
+      role: 主训练集 (EasyR1 有官方基线脚本)
+    - name: mmk12
+      hf_id: FanqingM/MMK12
+      license: apache-2.0
+      risk: low
+      role: 补充多学科可验证题目
+
+# ---------------------------------------------------------------------------
+# 评测数据
+# ---------------------------------------------------------------------------
+eval:
+  sources:
+    - name: mme
+      hf_id: lmms-lab-encoder/MME        # 旧 ID lmms-lab/MME 已 307 迁移
+      license: unknown
+      local_plan: 全量 (~2 GB)
+    - name: mathvista
+      hf_id: AI4Math/MathVista
+      license: CC-BY-SA-4.0
+      local_plan: testmini 1000 题
+    - name: videomme
+      hf_id: lmms-eval/Video-MME         # 旧 ID lmms-lab/Video-MME 已 307 迁移
+      license: unknown
+      local_plan: >
+        ⚠️ 仅下载标注。视频本体数百 GB，且与 VideoInstruct 的 YouTube 来源
+        不同源，按 PLAN K7 先查磁盘再决定 (docs/03)。
+
+# ---------------------------------------------------------------------------
+# 上游图像归档 (PLAN 未提及，为实现 SFT 图像而额外发现)
+# ---------------------------------------------------------------------------
+image_archives:
+  - name: coco_train2017
+    url: http://images.cocodataset.org/zips/train2017.zip
+    bytes: 19336861798          # 实测 Content-Length
+    provides: coco/train2017/*.jpg
+  - name: gqa_images
+    url: https://downloads.cs.stanford.edu/nlp/data/gqa/images.zip
+    bytes: 21817965542          # 实测
+    provides: gqa/images/*.jpg
+  - name: textvqa_images
+    url: https://dl.fbaipublicfiles.com/textvqa/images/train_val_images.zip
+    bytes: 7072297970           # 实测
+    provides: textvqa/train_images/*.jpg
+  - name: visual_genome
+    url: https://huggingface.co/datasets/BoyangZ/VisualGenome_VG_100K_1_and_2
+    bytes: null
+    provides: vg/VG_100K/*.jpg, vg/VG_100K_2/*.jpg
+    notes: >
+      ⚠️ 官方源 visualgenome.org 在本机**实测不可达** (curl code=000)。
+      改用 HF 镜像 BoyangZ/VisualGenome_VG_100K_1_and_2。
+
+# ---------------------------------------------------------------------------
+# 许可风险汇总 (PLAN K9)
+# ---------------------------------------------------------------------------
+license_risk_summary:
+  HIGH:
+    - Lin-Chen/ShareGPT4V (CC-BY-NC-4.0)
+    - zhiqings/LLaVA-RLHF-Data (CC-BY-NC-4.0)
+    - openbmb/RLHF-V-Dataset (CC-BY-NC-4.0)
+  MEDIUM:
+    - liuhaotian/LLaVA-Instruct-150K
+    - MBZUAI/VideoInstruct-100K
+  note: HIGH 项为**非商用**授权；若成果需商用，必须替换或移除这两项。

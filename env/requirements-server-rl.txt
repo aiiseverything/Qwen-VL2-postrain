@@ -1,0 +1,24 @@
+# ============================================================================
+# venv-2: EasyR1 / verl —— GRPO (R8)
+# 安装到 .venv-rl/
+# ⚠️ 与 venv-1 **不可混装**: vLLM 对 torch/transformers 的版本要求与
+#    LLaMA-Factory 冲突 (PLAN 风险 K2)。两个独立 venv 是硬性要求。
+# EasyR1 README 要求: transformers>=4.54.0, vllm>=0.8.3
+# ============================================================================
+torch==2.6.0
+torchvision==0.21.0
+transformers==4.54.0
+vllm==0.8.5
+accelerate==1.7.0
+datasets==3.6.0
+flash-attn==2.7.4.post1
+qwen-vl-utils==0.0.11
+ray[default]==2.46.0
+wandb==0.19.11
+codetiming==1.4.0
+hydra-core==1.3.2
+omegaconf==2.3.0
+pyarrow==19.0.1
+pandas==2.2.3
+Pillow==11.1.0
+tensordict==0.6.2

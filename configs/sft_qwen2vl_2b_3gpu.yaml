@@ -1,0 +1,56 @@
+# ============================================================================
+# SFT —— 3 卡版本 (本机实际可用: GPU 4,5,6)
+# ----------------------------------------------------------------------------
+# 与 configs/sft_qwen2vl_2b.yaml (PLAN 的 4×L40 原方案) 的唯一差别:
+#   卡数 4 -> 3, gradient_accumulation_steps 8 -> 11
+#   目的: **保持 global batch ≈ 128 不变** (4×8×4 = 128 → 4×11×3 = 132)
+#   其余超参完全照 PLAN §8.1, 便于与 4 卡方案对比。
+#
+# 用法:
+#   CUDA_VISIBLE_DEVICES=4,5,6 NPROC=3 bash scripts/train/launch_4xl40.sh sft
+#   (先跑 --max_steps 100 校准吞吐, 见 docs/03 §5.1)
+# ============================================================================
+
+model_name_or_path: models/Qwen2-VL-2B-Instruct
+template: qwen2_vl
+trust_remote_code: true
+
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true               # ★ R6
+freeze_multi_modal_projector: false     # ★ D3
+
+dataset: postrain_sft
+dataset_dir: configs
+cutoff_len: 4096
+preprocessing_num_workers: 8
+dataloader_num_workers: 4
+
+image_max_pixels: 262144                # ★ 512×512 ≈ 334 visual tokens
+image_min_pixels: 1024
+video_max_pixels: 16384
+video_fps: 2.0
+video_maxlen: 32        # ★ LLaMA-Factory 默认 128 帧! 128帧×~20token/帧 ≈ 2560
+                       #   视觉 token, 会直接撑爆 cutoff_len。32 帧 ≈ 640 token。
+
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 11         # ← 3 卡下保持 global batch ≈ 128
+learning_rate: 1.0e-5
+num_train_epochs: 2.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+max_grad_norm: 1.0
+optim: adamw_torch
+bf16: true
+gradient_checkpointing: true
+
+deepspeed: configs/ds_zero2.json
+ddp_timeout: 180000000
+
+output_dir: results/checkpoints/sft
+logging_steps: 5
+save_steps: 200
+save_total_limit: 3
+plot_loss: true
+report_to: none

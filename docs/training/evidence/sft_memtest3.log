@@ -1,0 +1,723 @@
+[1;34m[22:56:08][0m 卡数为 7, 自动选用 configs/sft_qwen2vl_2b_7gpu.yaml
+[1;34m[22:56:09][0m 启动 sft | 配置 configs/sft_qwen2vl_2b_7gpu.yaml | 7 卡 | 输出 results/checkpoints/sft
+[1;34m[22:56:09][0m 覆盖参数: max_steps=20 output_dir=results/diag/memtest3 overwrite_output_dir=true logging_steps=5 save_steps=100000 plot_loss=false
+[INFO|2026-09-26 22:56:41] llamafactory.launcher:144 >> Initializing 7 distributed tasks at: dev-1789611011167419-instance-0-0.linseer-ai.svc.cluster.local:50279
+[2026-09-26 22:57:06,641] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:57:06,641] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:57:06,641] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:57:06,642] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:57:06,642] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:57:06,642] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:57:06,642] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:57:09,336] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:57:09,336] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:57:09,336] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:57:09,337] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2026-09-26 22:57:09,338] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:57:09,339] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:57:09,340] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:57:09,346] [INFO] [comm.py:658:init_distributed] cdb=None
+[INFO|2026-09-26 22:57:10] llamafactory.hparams.parser:523 >> Process rank: 0, world size: 7, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,230 >> loading file vocab.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,230 >> loading file merges.txt
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,230 >> loading file tokenizer.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,230 >> loading file added_tokens.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,231 >> loading file special_tokens_map.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,231 >> loading file tokenizer_config.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,231 >> loading file chat_template.jinja
+[INFO|2026-09-26 22:57:10] llamafactory.hparams.parser:523 >> Process rank: 5, world size: 7, device: cuda:5, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:57:10] llamafactory.hparams.parser:523 >> Process rank: 2, world size: 7, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:57:10] llamafactory.hparams.parser:523 >> Process rank: 4, world size: 7, device: cuda:4, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:57:10] llamafactory.hparams.parser:523 >> Process rank: 1, world size: 7, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:57:10] llamafactory.hparams.parser:523 >> Process rank: 6, world size: 7, device: cuda:6, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:57:10] llamafactory.hparams.parser:523 >> Process rank: 3, world size: 7, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|tokenization_utils_base.py:2336] 2026-09-26 22:57:10,604 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|image_processing_base.py:376] 2026-09-26 22:57:10,607 >> loading configuration file models/Qwen2-VL-2B-Instruct/preprocessor_config.json
+[INFO|image_processing_base.py:376] 2026-09-26 22:57:10,621 >> loading configuration file models/Qwen2-VL-2B-Instruct/preprocessor_config.json
+[INFO|image_processing_base.py:423] 2026-09-26 22:57:10,632 >> Image processor Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "patch_size": 14,
+  "processor_class": "Qwen2VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,633 >> loading file vocab.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,633 >> loading file merges.txt
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,633 >> loading file tokenizer.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,633 >> loading file added_tokens.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,633 >> loading file special_tokens_map.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,633 >> loading file tokenizer_config.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:57:10,633 >> loading file chat_template.jinja
+[INFO|tokenization_utils_base.py:2336] 2026-09-26 22:57:10,896 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[WARNING|logging.py:328] 2026-09-26 22:57:10,899 >> You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+[INFO|video_processing_utils.py:718] 2026-09-26 22:57:10,899 >> loading configuration file models/Qwen2-VL-2B-Instruct/preprocessor_config.json
+[INFO|video_processing_utils.py:764] 2026-09-26 22:57:10,906 >> Video processor Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "size_divisor": null,
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+[rank5]:[W926 22:57:11.213864565 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 5]  using GPU 5 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[INFO|processing_utils.py:1117] 2026-09-26 22:57:11,418 >> Processor Qwen2VLProcessor:
+- image_processor: Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "patch_size": 14,
+  "processor_class": "Qwen2VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2TokenizerFast(name_or_path='models/Qwen2-VL-2B-Instruct', vocab_size=151643, model_max_length=32768, is_fast=True, padding_side='left', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|object_ref_start|>', '<|object_ref_end|>', '<|box_start|>', '<|box_end|>', '<|quad_start|>', '<|quad_end|>', '<|vision_start|>', '<|vision_end|>', '<|vision_pad|>', '<|image_pad|>', '<|video_pad|>']}, clean_up_tokenization_spaces=False, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+}
+)
+- video_processor: Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "size_divisor": null,
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "processor_class": "Qwen2VLProcessor"
+}
+
+[INFO|2026-09-26 22:57:11] llamafactory.data.loader:144 >> Loading dataset ../data/processed/sft_400k.clean.jsonl...
+[rank4]:[W926 22:57:11.301867753 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 4]  using GPU 4 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank1]:[W926 22:57:11.316902428 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank2]:[W926 22:57:11.327619923 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank6]:[W926 22:57:11.351038748 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 6]  using GPU 6 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank3]:[W926 22:57:11.412959211 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank0]:[W926 22:57:22.351110485 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+NCCL version 2.21.5+cuda12.4
+training example:
+input_ids:
+[151644, 8948, 198, 2610, 525, 264, 10950, 17847, 13, 151645, 198, 151644, 872, 198, 151652, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151653, 198, 5501, 3410, 264, 2805, 4008, 369, 419, 5537, 25, 508, 15, 13, 17, 20, 11, 220, 15, 13, 15, 17, 11, 220, 15, 13, 22, 19, 11, 220, 15, 13, 24, 20, 936, 151645, 198, 151644, 77091, 198, 71735, 13, 151645, 198, 151644, 872, 198, 5501, 3410, 279, 30618, 3745, 16184, 315, 279, 5537, 419, 11652, 16555, 25, 2086, 29595, 504, 1290, 13, 151645, 198, 151644, 77091, 198, 58, 15, 13, 22, 11, 220, 15, 13, 15, 20, 11, 220, 15, 13, 24, 16, 11, 220, 15, 13, 22, 22, 60, 151645, 198, 151644, 872, 198, 5501, 3410, 264, 2805, 4008, 369, 419, 5537, 25, 508, 15, 13, 23, 22, 11, 220, 15, 13, 15, 21, 11, 220, 16, 13, 15, 11, 220, 15, 13, 22, 16, 936, 151645, 198, 151644, 77091, 198, 71735, 4815, 2326, 1008, 60011, 429, 374, 3245, 9434, 13, 151645, 198, 151644, 872, 198, 5501, 3410, 264, 2805, 4008, 369, 419, 5537, 25, 508, 15, 13, 22, 11, 220, 15, 13, 15, 20, 11, 220, 15, 13, 24, 16, 11, 220, 15, 13, 22, 22, 936, 151645, 198, 151644, 77091, 198, 15666, 29595, 504, 1290, 13, 151645, 198, 151644, 872, 198, 5501, 3410, 264, 2805, 4008, 369, 419, 5537, 25, 508, 15, 13, 23, 22, 11, 220, 15, 13, 15, 21, 11, 220, 16, 13, 15, 11, 220, 15, 13, 22, 16, 936, 151645, 198, 151644, 77091, 198, 71735, 389, 279, 3041, 1290, 3108, 13, 151645, 198, 151644, 872, 198, 5501, 3410, 279, 30618, 3745, 16184, 315, 279, 5537, 419, 11652, 16555, 25, 29595, 2086, 504, 2115, 13, 151645, 198, 151644, 77091, 198, 58, 15, 13, 16, 18, 11, 220, 15, 13, 15, 19, 11, 220, 15, 13, 17, 23, 11, 220, 15, 13, 22, 19, 60, 151645, 198, 151644, 872, 198, 5501, 3410, 264, 2805, 4008, 369, 419, 5537, 25, 508, 15, 13, 17, 20, 11, 220, 15, 13, 15, 17, 11, 220, 15, 13, 22, 19, 11, 220, 15, 13, 24, 20, 936, 151645, 198, 151644, 77091, 198, 71735, 304, 2480, 1651, 13, 151645, 198, 151644, 872, 198, 5501, 3410, 264, 2805, 4008, 369, 419, 5537, 25, 508, 15, 13, 15, 11, 220, 15, 13, 15, 20, 11, 220, 15, 13, 16, 19, 11, 220, 15, 13, 21, 19, 936, 151645, 198, 151644, 77091, 198, 71735, 3041, 60843, 2115, 13, 151645, 198]
+inputs:
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+<|vision_start|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|vision_end|>
+Please provide a short description for this region: [0.25, 0.02, 0.74, 0.95].<|im_end|>
+<|im_start|>assistant
+Jar.<|im_end|>
+<|im_start|>user
+Please provide the bounding box coordinate of the region this sentence describes: second jar from right.<|im_end|>
+<|im_start|>assistant
+[0.7, 0.05, 0.91, 0.77]<|im_end|>
+<|im_start|>user
+Please provide a short description for this region: [0.87, 0.06, 1.0, 0.71].<|im_end|>
+<|im_start|>assistant
+Jar behind three other jars that is least visible.<|im_end|>
+<|im_start|>user
+Please provide a short description for this region: [0.7, 0.05, 0.91, 0.77].<|im_end|>
+<|im_start|>assistant
+Second jar from right.<|im_end|>
+<|im_start|>user
+Please provide a short description for this region: [0.87, 0.06, 1.0, 0.71].<|im_end|>
+<|im_start|>assistant
+Jar on the far right side.<|im_end|>
+<|im_start|>user
+Please provide the bounding box coordinate of the region this sentence describes: jar second from left.<|im_end|>
+<|im_start|>assistant
+[0.13, 0.04, 0.28, 0.74]<|im_end|>
+<|im_start|>user
+Please provide a short description for this region: [0.25, 0.02, 0.74, 0.95].<|im_end|>
+<|im_start|>assistant
+Jar in full view.<|im_end|>
+<|im_start|>user
+Please provide a short description for this region: [0.0, 0.05, 0.14, 0.64].<|im_end|>
+<|im_start|>assistant
+Jar farthest left.<|im_end|>
+
+label_ids:
+[-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 71735, 13, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 58, 15, 13, 22, 11, 220, 15, 13, 15, 20, 11, 220, 15, 13, 24, 16, 11, 220, 15, 13, 22, 22, 60, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 71735, 4815, 2326, 1008, 60011, 429, 374, 3245, 9434, 13, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 15666, 29595, 504, 1290, 13, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 71735, 389, 279, 3041, 1290, 3108, 13, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 58, 15, 13, 16, 18, 11, 220, 15, 13, 15, 19, 11, 220, 15, 13, 17, 23, 11, 220, 15, 13, 22, 19, 60, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 71735, 304, 2480, 1651, 13, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 71735, 3041, 60843, 2115, 13, 151645, 198]
+labels:
+Jar.<|im_end|>
+[0.7, 0.05, 0.91, 0.77]<|im_end|>
+Jar behind three other jars that is least visible.<|im_end|>
+Second jar from right.<|im_end|>
+Jar on the far right side.<|im_end|>
+[0.13, 0.04, 0.28, 0.74]<|im_end|>
+Jar in full view.<|im_end|>
+Jar farthest left.<|im_end|>
+
+[INFO|configuration_utils.py:750] 2026-09-26 22:57:33,488 >> loading configuration file models/Qwen2-VL-2B-Instruct/config.json
+[INFO|configuration_utils.py:817] 2026-09-26 22:57:33,494 >> Model config Qwen2VLConfig {
+  "architectures": [
+    "Qwen2VLForConditionalGeneration"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 151643,
+  "eos_token_id": 151645,
+  "hidden_act": "silu",
+  "hidden_size": 1536,
+  "image_token_id": 151655,
+  "initializer_range": 0.02,
+  "intermediate_size": 8960,
+  "max_position_embeddings": 32768,
+  "max_window_layers": 28,
+  "model_type": "qwen2_vl",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 28,
+  "num_key_value_heads": 2,
+  "rms_norm_eps": 1e-06,
+  "rope_scaling": {
+    "mrope_section": [
+      16,
+      24,
+      24
+    ],
+    "rope_type": "default",
+    "type": "default"
+  },
+  "rope_theta": 1000000.0,
+  "sliding_window": 32768,
+  "text_config": {
+    "architectures": [
+      "Qwen2VLForConditionalGeneration"
+    ],
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 1536,
+    "image_token_id": null,
+    "initializer_range": 0.02,
+    "intermediate_size": 8960,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 32768,
+    "max_window_layers": 28,
+    "model_type": "qwen2_vl_text",
+    "num_attention_heads": 12,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 2,
+    "rms_norm_eps": 1e-06,
+    "rope_scaling": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_type": "default",
+      "type": "default"
+    },
+    "rope_theta": 1000000.0,
+    "sliding_window": null,
+    "tie_word_embeddings": true,
+    "torch_dtype": "bfloat16",
+    "use_cache": true,
+    "use_sliding_window": false,
+    "video_token_id": null,
+    "vision_end_token_id": 151653,
+    "vision_start_token_id": 151652,
+    "vision_token_id": 151654,
+    "vocab_size": 151936
+  },
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.55.4",
+  "use_cache": true,
+  "use_sliding_window": false,
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "embed_dim": 1280,
+    "hidden_act": "quick_gelu",
+    "hidden_size": 1536,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "mlp_ratio": 4,
+    "model_type": "qwen2_vl",
+    "num_heads": 16,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654,
+  "vocab_size": 151936
+}
+
+[INFO|2026-09-26 22:57:33] llamafactory.model.model_utils.kv_cache:144 >> KV cache is disabled during training.
+[INFO|modeling_utils.py:1306] 2026-09-26 22:57:34,131 >> loading weights file models/Qwen2-VL-2B-Instruct/model.safetensors.index.json
+[INFO|modeling_utils.py:1380] 2026-09-26 22:57:34,136 >> Will use torch_dtype=torch.bfloat16 as defined in model's config object
+[INFO|modeling_utils.py:2412] 2026-09-26 22:57:34,136 >> Instantiating Qwen2VLForConditionalGeneration model under default dtype torch.bfloat16.
+[INFO|configuration_utils.py:1098] 2026-09-26 22:57:34,147 >> Generate config GenerationConfig {
+  "bos_token_id": 151643,
+  "eos_token_id": 151645,
+  "use_cache": false
+}
+
+[INFO|modeling_utils.py:2412] 2026-09-26 22:57:34,193 >> Instantiating Qwen2VLTextModel model under default dtype torch.bfloat16.
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:11<00:11, 11.66s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:12<00:12, 12.17s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:12<00:12, 12.16s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:12<00:12, 12.17s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:12<00:12, 12.18s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:12<00:12, 12.16s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:12<00:12, 12.47s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:12<00:00,  5.47s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:12<00:00,  6.48s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  5.50s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  5.54s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  6.54s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  6.54s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  5.54s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  5.64s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  5.54s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  6.54s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  6.54s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  6.54s/it]
+[INFO|modeling_utils.py:5619] 2026-09-26 22:57:47,410 >> All model checkpoint weights were used when initializing Qwen2VLForConditionalGeneration.
+
+[INFO|modeling_utils.py:5627] 2026-09-26 22:57:47,410 >> All the weights of Qwen2VLForConditionalGeneration were initialized from the model checkpoint at models/Qwen2-VL-2B-Instruct.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use Qwen2VLForConditionalGeneration for predictions without further training.
+[INFO|configuration_utils.py:1051] 2026-09-26 22:57:47,414 >> loading configuration file models/Qwen2-VL-2B-Instruct/generation_config.json
+[INFO|configuration_utils.py:1098] 2026-09-26 22:57:47,415 >> Generate config GenerationConfig {
+  "bos_token_id": 151643,
+  "do_sample": true,
+  "eos_token_id": [
+    151645,
+    151643
+  ],
+  "pad_token_id": 151643,
+  "temperature": 0.01,
+  "top_k": 1,
+  "top_p": 0.001
+}
+
+[INFO|2026-09-26 22:57:47] llamafactory.model.model_utils.checkpointing:144 >> Gradient checkpointing enabled.
+[INFO|2026-09-26 22:57:47] llamafactory.model.model_utils.attention:144 >> Using torch SDPA for faster training and inference.
+[INFO|2026-09-26 22:57:47] llamafactory.model.adapter:144 >> Upcasting trainable params to float32.
+[INFO|2026-09-26 22:57:47] llamafactory.model.adapter:144 >> Fine-tuning method: Full
+[INFO|2026-09-26 22:57:47] llamafactory.model.model_utils.visual:144 >> Set vision model not trainable: ['visual.patch_embed', 'visual.blocks'].
+Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  5.57s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:13<00:00,  6.56s/it]
+[INFO|2026-09-26 22:57:47] llamafactory.model.loader:144 >> trainable params: 1,577,802,240 || all params: 2,208,985,600 || trainable%: 71.4266
+[INFO|trainer.py:707] 2026-09-26 22:57:47,622 >> max_steps is given, it will override any value given in num_train_epochs
+[INFO|trainer.py:757] 2026-09-26 22:57:47,623 >> Using auto half precision backend
+[2026-09-26 22:57:48,016] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed info: version=0.16.4, git-hash=unknown, git-branch=unknown
+[2026-09-26 22:57:48,017] [INFO] [config.py:734:__init__] Config mesh_device None world_size = 7
+[2026-09-26 22:57:48,753] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Flops Profiler Enabled: False
+[2026-09-26 22:57:48,756] [INFO] [logging.py:128:log_dist] [Rank 0] Using client Optimizer as basic optimizer
+[2026-09-26 22:57:48,756] [INFO] [logging.py:128:log_dist] [Rank 0] Removing param_group that has no 'params' in the basic Optimizer
+[2026-09-26 22:57:48,834] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Basic Optimizer = AdamW
+[2026-09-26 22:57:48,834] [INFO] [utils.py:59:is_zero_supported_optimizer] Checking ZeRO support for optimizer=AdamW type=<class 'torch.optim.adamw.AdamW'>
+[2026-09-26 22:57:48,834] [INFO] [logging.py:128:log_dist] [Rank 0] Creating torch.bfloat16 ZeRO stage 2 optimizer
+[2026-09-26 22:57:48,834] [INFO] [stage_1_and_2.py:149:__init__] Reduce bucket size 500000000
+[2026-09-26 22:57:48,834] [INFO] [stage_1_and_2.py:150:__init__] Allgather bucket size 500000000
+[2026-09-26 22:57:48,835] [INFO] [stage_1_and_2.py:151:__init__] CPU Offload: False
+[2026-09-26 22:57:48,835] [INFO] [stage_1_and_2.py:152:__init__] Round robin gradient partitioning: False
+[2026-09-26 22:58:09,017] [INFO] [utils.py:781:see_memory_usage] Before initializing optimizer states
+[2026-09-26 22:58:09,019] [INFO] [utils.py:782:see_memory_usage] MA 4.95 GB         Max_MA 4.95 GB         CA 5.01 GB         Max_CA 5 GB 
+[2026-09-26 22:58:09,020] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 75.49 GB, percent = 15.0%
+[2026-09-26 22:58:09,616] [INFO] [utils.py:781:see_memory_usage] After initializing optimizer states
+[2026-09-26 22:58:09,618] [INFO] [utils.py:782:see_memory_usage] MA 4.95 GB         Max_MA 5.79 GB         CA 5.85 GB         Max_CA 6 GB 
+[2026-09-26 22:58:09,618] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 75.89 GB, percent = 15.1%
+[2026-09-26 22:58:09,619] [INFO] [stage_1_and_2.py:550:__init__] optimizer state initialized
+[2026-09-26 22:58:10,568] [INFO] [utils.py:781:see_memory_usage] After initializing ZeRO optimizer
+[2026-09-26 22:58:10,569] [INFO] [utils.py:782:see_memory_usage] MA 4.95 GB         Max_MA 4.95 GB         CA 5.85 GB         Max_CA 6 GB 
+[2026-09-26 22:58:10,570] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 76.84 GB, percent = 15.3%
+[2026-09-26 22:58:10,573] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Final Optimizer = DeepSpeedZeroOptimizer
+[2026-09-26 22:58:10,573] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed using configured LR scheduler = None
+[2026-09-26 22:58:10,573] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed LR Scheduler = None
+[2026-09-26 22:58:10,573] [INFO] [logging.py:128:log_dist] [Rank 0] step=0, skipped=0, lr=[0.0, 0.0], mom=[(0.9, 0.999), (0.9, 0.999)]
+[2026-09-26 22:58:10,576] [INFO] [config.py:1001:print] DeepSpeedEngine configuration:
+[2026-09-26 22:58:10,577] [INFO] [config.py:1005:print]   activation_checkpointing_config  {
+    "partition_activations": false, 
+    "contiguous_memory_optimization": false, 
+    "cpu_checkpointing": false, 
+    "number_checkpoints": null, 
+    "synchronize_checkpoint_boundary": false, 
+    "profile": false
+}
+[2026-09-26 22:58:10,577] [INFO] [config.py:1005:print]   aio_config ................... {'block_size': 1048576, 'queue_depth': 8, 'intra_op_parallelism': 1, 'single_submit': False, 'overlap_events': True, 'use_gds': False}
+[2026-09-26 22:58:10,577] [INFO] [config.py:1005:print]   amp_enabled .................. False
+[2026-09-26 22:58:10,577] [INFO] [config.py:1005:print]   amp_params ................... False
+[2026-09-26 22:58:10,597] [INFO] [config.py:1005:print]   autotuning_config ............ {
+    "enabled": false, 
+    "start_step": null, 
+    "end_step": null, 
+    "metric_path": null, 
+    "arg_mappings": null, 
+    "metric": "throughput", 
+    "model_info": null, 
+    "results_dir": "autotuning_results", 
+    "exps_dir": "autotuning_exps", 
+    "overwrite": true, 
+    "fast": true, 
+    "start_profile_step": 3, 
+    "end_profile_step": 5, 
+    "tuner_type": "gridsearch", 
+    "tuner_early_stopping": 5, 
+    "tuner_num_trials": 50, 
+    "model_info_path": null, 
+    "mp_size": 1, 
+    "max_train_batch_size": null, 
+    "min_train_batch_size": 1, 
+    "max_train_micro_batch_size_per_gpu": 1.024000e+03, 
+    "min_train_micro_batch_size_per_gpu": 1, 
+    "num_tuning_micro_batch_sizes": 3
+}
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   bfloat16_enabled ............. True
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   bfloat16_immediate_grad_update  False
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   checkpoint_parallel_write_pipeline  False
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   checkpoint_tag_validation_enabled  True
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   checkpoint_tag_validation_fail  False
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   comms_config ................. <deepspeed.comm.config.DeepSpeedCommsConfig object at 0x7fa3effa2cf0>
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   communication_data_type ...... None
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   compression_config ........... {'weight_quantization': {'shared_parameters': {'enabled': False, 'quantizer_kernel': False, 'schedule_offset': 0, 'quantize_groups': 1, 'quantize_verbose': False, 'quantization_type': 'symmetric', 'quantize_weight_in_forward': False, 'rounding': 'nearest', 'fp16_mixed_quantize': False, 'quantize_change_ratio': 0.001}, 'different_groups': {}}, 'activation_quantization': {'shared_parameters': {'enabled': False, 'quantization_type': 'symmetric', 'range_calibration': 'dynamic', 'schedule_offset': 1000}, 'different_groups': {}}, 'sparse_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'row_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'head_pruning': {'shared_parameters': {'enabled': False, 'method': 'topk', 'schedule_offset': 1000}, 'different_groups': {}}, 'channel_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'layer_reduction': {'enabled': False}}
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   curriculum_enabled_legacy .... False
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   curriculum_params_legacy ..... False
+[2026-09-26 22:58:10,598] [INFO] [config.py:1005:print]   data_efficiency_config ....... {'enabled': False, 'seed': 1234, 'data_sampling': {'enabled': False, 'num_epochs': 1000, 'num_workers': 0, 'curriculum_learning': {'enabled': False}}, 'data_routing': {'enabled': False, 'random_ltd': {'enabled': False, 'layer_token_lr_schedule': {'enabled': False}}}}
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   data_efficiency_enabled ...... False
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   dataloader_drop_last ......... False
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   disable_allgather ............ False
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   dump_state ................... False
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   dynamic_loss_scale_args ...... None
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   eigenvalue_enabled ........... False
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   eigenvalue_gas_boundary_resolution  1
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   eigenvalue_layer_name ........ bert.encoder.layer
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   eigenvalue_layer_num ......... 0
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   eigenvalue_max_iter .......... 100
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   eigenvalue_stability ......... 1e-06
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   eigenvalue_tol ............... 0.01
+[2026-09-26 22:58:10,599] [INFO] [config.py:1005:print]   eigenvalue_verbose ........... False
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   elasticity_enabled ........... False
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   flops_profiler_config ........ {
+    "enabled": false, 
+    "recompute_fwd_factor": 0.0, 
+    "profile_step": 1, 
+    "module_depth": -1, 
+    "top_modules": 1, 
+    "detailed": true, 
+    "output_file": null
+}
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   fp16_auto_cast ............... None
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   fp16_enabled ................. False
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   fp16_master_weights_and_gradients  False
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   global_rank .................. 0
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   grad_accum_dtype ............. None
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   gradient_accumulation_steps .. 3
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   gradient_clipping ............ 1.0
+[2026-09-26 22:58:10,600] [INFO] [config.py:1005:print]   gradient_predivide_factor .... 1.0
+[2026-09-26 22:58:10,601] [INFO] [config.py:1005:print]   graph_harvesting ............. False
+[2026-09-26 22:58:10,601] [INFO] [config.py:1005:print]   hybrid_engine ................ enabled=False max_out_tokens=512 inference_tp_size=1 release_inference_cache=False pin_parameters=True tp_gather_partition_size=8
+[2026-09-26 22:58:10,601] [INFO] [config.py:1005:print]   initial_dynamic_scale ........ 1
+[2026-09-26 22:58:10,601] [INFO] [config.py:1005:print]   load_universal_checkpoint .... False
+[2026-09-26 22:58:10,601] [INFO] [config.py:1005:print]   loss_scale ................... 1.0
+[2026-09-26 22:58:10,601] [INFO] [config.py:1005:print]   memory_breakdown ............. False
+[2026-09-26 22:58:10,601] [INFO] [config.py:1005:print]   mics_hierarchial_params_gather  False
+[2026-09-26 22:58:10,601] [INFO] [config.py:1005:print]   mics_shard_size .............. -1
+[2026-09-26 22:58:10,602] [INFO] [config.py:1005:print]   monitor_config ............... tensorboard=TensorBoardConfig(enabled=False, output_path='', job_name='DeepSpeedJobName') comet=CometConfig(enabled=False, samples_log_interval=100, project=None, workspace=None, api_key=None, experiment_name=None, experiment_key=None, online=None, mode=None) wandb=WandbConfig(enabled=False, group=None, team=None, project='deepspeed') csv_monitor=CSVConfig(enabled=False, output_path='', job_name='DeepSpeedJobName')
+[2026-09-26 22:58:10,602] [INFO] [config.py:1005:print]   nebula_config ................ {
+    "enabled": false, 
+    "persistent_storage_path": null, 
+    "persistent_time_interval": 100, 
+    "num_of_version_in_retention": 2, 
+    "enable_nebula_load": true, 
+    "load_path": null
+}
+[2026-09-26 22:58:10,602] [INFO] [config.py:1005:print]   optimizer_legacy_fusion ...... False
+[2026-09-26 22:58:10,602] [INFO] [config.py:1005:print]   optimizer_name ............... None
+[2026-09-26 22:58:10,602] [INFO] [config.py:1005:print]   optimizer_params ............. None
+[2026-09-26 22:58:10,602] [INFO] [config.py:1005:print]   pipeline ..................... {'stages': 'auto', 'partition': 'best', 'seed_layers': False, 'activation_checkpoint_interval': 0, 'pipe_partitioned': True, 'grad_partitioned': True}
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   pld_enabled .................. False
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   pld_params ................... False
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   prescale_gradients ........... False
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   scheduler_name ............... None
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   scheduler_params ............. None
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   seq_parallel_communication_data_type  torch.float32
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   sparse_attention ............. None
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   sparse_gradients_enabled ..... False
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   steps_per_print .............. inf
+[2026-09-26 22:58:10,603] [INFO] [config.py:1005:print]   tensor_parallel_config ....... dtype=torch.float16 autotp_size=0 tensor_parallel=TPConfig(tp_size=1, tp_grain_size=1, mpu=None, tp_group=None) injection_policy_tuple=None keep_module_on_host=False replace_with_kernel_inject=False
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   timers_config ................ enabled=True synchronized=True
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   train_batch_size ............. 168
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   train_micro_batch_size_per_gpu  8
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   use_data_before_expert_parallel_  False
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   use_node_local_storage ....... False
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   wall_clock_breakdown ......... False
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   weight_quantization_config ... None
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   world_size ................... 7
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   zero_allow_untested_optimizer  True
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   zero_config .................. stage=2 contiguous_gradients=True reduce_scatter=True reduce_bucket_size=500000000 use_multi_rank_bucket_allreduce=True allgather_partitions=True allgather_bucket_size=500000000 overlap_comm=True load_from_fp32_weights=True elastic_checkpoint=False offload_param=None offload_optimizer=None sub_group_size=1000000000 cpu_offload_param=None cpu_offload_use_pin_memory=None cpu_offload=None prefetch_bucket_size=0 param_persistence_threshold=0 model_persistence_threshold=9223372036854775807 max_live_parameters=1000000000 max_reuse_distance=1000000000 gather_16bit_weights_on_model_save=False module_granularity_threshold=0 use_all_reduce_for_fetch_params=False stage3_gather_fp16_weights_on_model_save=False ignore_unused_parameters=True legacy_stage1=False round_robin_gradients=False zero_hpz_partition_size=1 zero_quantized_weights=False zero_quantized_nontrainable_weights=False zero_quantized_gradients=False zeropp_loco_param=None mics_shard_size=-1 mics_hierarchical_params_gather=False memory_efficient_linear=True pipeline_loading_checkpoint=False override_module_apply=True log_trace_cache_warnings=False
+[2026-09-26 22:58:10,604] [INFO] [config.py:1005:print]   zero_enabled ................. True
+[2026-09-26 22:58:10,605] [INFO] [config.py:1005:print]   zero_force_ds_cpu_optimizer .. True
+[2026-09-26 22:58:10,605] [INFO] [config.py:1005:print]   zero_optimization_stage ...... 2
+[2026-09-26 22:58:10,605] [INFO] [config.py:991:print_user_config]   json = {
+    "//": "DeepSpeed ZeRO-2 \u2014\u2014 R5 \u8981\u6c42\u3002\u9009 ZeRO-2 \u800c\u975e ZeRO-3 \u7684\u7406\u7531\u89c1 PLAN D2:", 
+    "//2": "L40 \u4e3a PCIe \u5361\u65e0 NVLink, ZeRO-3 \u6bcf\u6b65 all-gather \u5168\u53c2\u6570\u4f1a\u6210\u4e3a\u5e26\u5bbd\u74f6\u9888;", 
+    "//3": "Qwen2-VL-2B \u5728 ZeRO-2 \u4e0b\u663e\u5b58\u5145\u88d5 (\u4f30\u7b97\u89c1 docs/03 \u00a7\u663e\u5b58)\u3002", 
+    "bf16": {
+        "enabled": true
+    }, 
+    "fp16": {
+        "enabled": false
+    }, 
+    "zero_optimization": {
+        "stage": 2, 
+        "allgather_partitions": true, 
+        "allgather_bucket_size": 5.000000e+08, 
+        "overlap_comm": true, 
+        "reduce_scatter": true, 
+        "reduce_bucket_size": 5.000000e+08, 
+        "contiguous_gradients": true, 
+        "stage3_prefetch_bucket_size": 0, 
+        "stage3_param_persistence_threshold": 0
+    }, 
+    "gradient_accumulation_steps": 3, 
+    "gradient_clipping": 1.0, 
+    "steps_per_print": inf, 
+    "train_batch_size": 168, 
+    "train_micro_batch_size_per_gpu": 8, 
+    "wall_clock_breakdown": false, 
+    "zero_allow_untested_optimizer": true, 
+    "comms_logger": {
+        "enabled": false
+    }
+}
+[INFO|trainer.py:2433] 2026-09-26 22:58:10,610 >> ***** Running training *****
+[INFO|trainer.py:2434] 2026-09-26 22:58:10,610 >>   Num examples = 399,593
+[INFO|trainer.py:2435] 2026-09-26 22:58:10,610 >>   Num Epochs = 1
+[INFO|trainer.py:2436] 2026-09-26 22:58:10,610 >>   Instantaneous batch size per device = 8
+[INFO|trainer.py:2439] 2026-09-26 22:58:10,610 >>   Total train batch size (w. parallel, distributed & accumulation) = 168
+[INFO|trainer.py:2440] 2026-09-26 22:58:10,610 >>   Gradient Accumulation steps = 3
+[INFO|trainer.py:2441] 2026-09-26 22:58:10,610 >>   Total optimization steps = 20
+[INFO|trainer.py:2442] 2026-09-26 22:58:10,616 >>   Number of trainable parameters = 1,577,802,240
+  0%|          | 0/20 [00:00<?, ?it/s]`loss_type=None` was set in the config but it is unrecognised.Using the default loss: `ForCausalLMLoss`.
+`loss_type=None` was set in the config but it is unrecognised.Using the default loss: `ForCausalLMLoss`.
+`loss_type=None` was set in the config but it is unrecognised.Using the default loss: `ForCausalLMLoss`.
+`loss_type=None` was set in the config but it is unrecognised.Using the default loss: `ForCausalLMLoss`.
+`loss_type=None` was set in the config but it is unrecognised.Using the default loss: `ForCausalLMLoss`.
+`loss_type=None` was set in the config but it is unrecognised.Using the default loss: `ForCausalLMLoss`.
+[WARNING|logging.py:328] 2026-09-26 22:58:22,830 >> `loss_type=None` was set in the config but it is unrecognised.Using the default loss: `ForCausalLMLoss`.
+  5%|▌         | 1/20 [00:20<06:20, 20.02s/it] 10%|█         | 2/20 [00:28<03:57, 13.17s/it] 15%|█▌        | 3/20 [00:48<04:34, 16.17s/it] 20%|██        | 4/20 [01:02<04:04, 15.27s/it] 25%|██▌       | 5/20 [01:10<03:11, 12.78s/it]                                              {'loss': 1.0757, 'grad_norm': 1.782171368598938, 'learning_rate': 9.397368756032445e-06, 'epoch': 0.0}
+ 25%|██▌       | 5/20 [01:10<03:11, 12.78s/it] 30%|███       | 6/20 [01:25<03:08, 13.47s/it] 35%|███▌      | 7/20 [01:33<02:34, 11.87s/it] 40%|████      | 8/20 [01:53<02:51, 14.28s/it] 45%|████▌     | 9/20 [02:01<02:15, 12.28s/it] 50%|█████     | 10/20 [02:09<01:49, 10.96s/it]                                               {'loss': 1.0523, 'grad_norm': 1.8811450004577637, 'learning_rate': 6.227427435703997e-06, 'epoch': 0.0}
+ 50%|█████     | 10/20 [02:09<01:49, 10.96s/it] 55%|█████▌    | 11/20 [02:25<01:52, 12.48s/it] 60%|██████    | 12/20 [02:32<01:28, 11.09s/it] 65%|██████▌   | 13/20 [02:45<01:21, 11.59s/it] 70%|███████   | 14/20 [02:52<01:01, 10.27s/it] 75%|███████▌  | 15/20 [03:06<00:56, 11.22s/it]                                               {'loss': 1.0656, 'grad_norm': 1.739493727684021, 'learning_rate': 2.265259209387867e-06, 'epoch': 0.01}
+ 75%|███████▌  | 15/20 [03:06<00:56, 11.22s/it] 80%|████████  | 16/20 [03:14<00:41, 10.38s/it] 85%|████████▌ | 17/20 [03:28<00:33, 11.33s/it] 90%|█████████ | 18/20 [03:36<00:20, 10.42s/it] 95%|█████████▌| 19/20 [03:58<00:13, 13.86s/it]100%|██████████| 20/20 [04:05<00:00, 11.91s/it]                                               {'loss': 1.0344, 'grad_norm': 1.7116751670837402, 'learning_rate': 6.819348298638839e-08, 'epoch': 0.01}
+100%|██████████| 20/20 [04:05<00:00, 11.91s/it]W0926 23:03:06.505000 1263260 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1263427 closing signal SIGTERM
+W0926 23:03:06.511000 1263260 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1263428 closing signal SIGTERM
+W0926 23:03:06.599000 1263260 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1263430 closing signal SIGTERM
+W0926 23:03:06.605000 1263260 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1263431 closing signal SIGTERM
+W0926 23:03:06.699000 1263260 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1263432 closing signal SIGTERM
+W0926 23:03:06.705000 1263260 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1263433 closing signal SIGTERM
+E0926 23:03:06.940000 1263260 torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: -9) local_rank: 2 (pid: 1263429) of binary: /home/ml-user/workdir/project-2/.venv-lf/bin/python
+Traceback (most recent call last):
+  File "/home/ml-user/workdir/project-2/.venv-lf/bin/torchrun", line 10, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/home/ml-user/workdir/project-2/third_party/LlamaFactory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-26_23:03:06
+  host      : dev-1789611011167419-instance-0-0.dev-1789611011167419-instance-0-0.linseer-ai.svc.cluster.local
+  rank      : 2 (local_rank: 2)
+  exitcode  : -9 (pid: 1263429)
+  error_file: <N/A>
+  traceback : Signal 9 (SIGKILL) received by PID 1263429
+============================================================
+Traceback (most recent call last):
+  File "/home/ml-user/workdir/project-2/.venv-lf/bin/llamafactory-cli", line 10, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/ml-user/workdir/project-2/third_party/LlamaFactory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/home/ml-user/workdir/project-2/third_party/LlamaFactory/src/llamafactory/launcher.py", line 115, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/root/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '7', '--master_addr', 'dev-1789611011167419-instance-0-0.linseer-ai.svc.cluster.local', '--master_port', '50279', '/home/ml-user/workdir/project-2/third_party/LlamaFactory/src/llamafactory/launcher.py', 'configs/sft_qwen2vl_2b_7gpu.yaml', 'max_steps=20', 'output_dir=results/diag/memtest3', 'overwrite_output_dir=true', 'logging_steps=5', 'save_steps=100000', 'plot_loss=false']' returned non-zero exit status 1.

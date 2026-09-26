@@ -1,0 +1,15 @@
+=== 训练链启动快照 2026-09-27 01:53:17 ===
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6  NPROC=7
+[2026-09-27 01:53:31,162] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+torch=2.6.0+cu124 transformers=4.55.4 deepspeed=0.16.4
+peft=0.18.1 trl=0.18.2 datasets=3.6.0
+vllm=0.8.5
+verl=0.3.3.dev0
+flash-attn=2.8.3.post1
+0, NVIDIA L20, 46068 MiB
+1, NVIDIA L20, 46068 MiB
+2, NVIDIA L20, 46068 MiB
+3, NVIDIA L20, 46068 MiB
+4, NVIDIA L20, 46068 MiB
+5, NVIDIA L20, 46068 MiB
+6, NVIDIA L20, 46068 MiB

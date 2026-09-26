@@ -1,0 +1,54 @@
+{
+  "//": "LLaMA-Factory 数据集注册表。用法: yaml 里 dataset: postrain_sft, dataset_dir: configs",
+  "//2": "file_name 相对于 dataset_dir 解析；这里统一用仓库根相对路径的绝对可解析形式。",
+
+  "postrain_sft": {
+    "file_name": "../data/processed/sft_400k.clean.jsonl",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+
+  "postrain_sft_unfiltered": {
+    "file_name": "../data/processed/sft_400k.jsonl",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+
+  "postrain_dpo": {
+    "file_name": "../data/processed/dpo_10k.jsonl",
+    "formatting": "sharegpt",
+    "ranking": true,
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  }
+}

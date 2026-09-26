@@ -1,0 +1,285 @@
+[1;34m[22:47:32][0m 卡数为 7, 自动选用 configs/sft_qwen2vl_2b_7gpu.yaml
+[1;34m[22:47:32][0m 启动 sft | 配置 configs/sft_qwen2vl_2b_7gpu.yaml | 7 卡 | 输出 results/checkpoints/sft
+[1;34m[22:47:32][0m 覆盖参数: max_steps=15 output_dir=results/diag/memtest2 overwrite_output_dir=true logging_steps=5 save_steps=100000 plot_loss=false
+[INFO|2026-09-26 22:48:05] llamafactory.launcher:144 >> Initializing 7 distributed tasks at: dev-1789611011167419-instance-0-0.linseer-ai.svc.cluster.local:47841
+[2026-09-26 22:48:38,307] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:48:38,307] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:48:38,307] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:48:38,307] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:48:38,307] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:48:38,308] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:48:38,308] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-09-26 22:48:42,113] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:48:42,113] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:48:42,113] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:48:42,113] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:48:42,113] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:48:42,114] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2026-09-26 22:48:42,114] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-09-26 22:48:42,117] [INFO] [comm.py:658:init_distributed] cdb=None
+[INFO|2026-09-26 22:48:43] llamafactory.hparams.parser:523 >> Process rank: 0, world size: 7, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,138 >> loading file vocab.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,139 >> loading file merges.txt
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,139 >> loading file tokenizer.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,139 >> loading file added_tokens.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,139 >> loading file special_tokens_map.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,139 >> loading file tokenizer_config.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,139 >> loading file chat_template.jinja
+[INFO|2026-09-26 22:48:43] llamafactory.hparams.parser:523 >> Process rank: 3, world size: 7, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:48:43] llamafactory.hparams.parser:523 >> Process rank: 1, world size: 7, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:48:43] llamafactory.hparams.parser:523 >> Process rank: 4, world size: 7, device: cuda:4, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:48:43] llamafactory.hparams.parser:523 >> Process rank: 6, world size: 7, device: cuda:6, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:48:43] llamafactory.hparams.parser:523 >> Process rank: 5, world size: 7, device: cuda:5, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-09-26 22:48:43] llamafactory.hparams.parser:523 >> Process rank: 2, world size: 7, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|tokenization_utils_base.py:2336] 2026-09-26 22:48:43,520 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|image_processing_base.py:376] 2026-09-26 22:48:43,521 >> loading configuration file models/Qwen2-VL-2B-Instruct/preprocessor_config.json
+[INFO|image_processing_base.py:376] 2026-09-26 22:48:43,538 >> loading configuration file models/Qwen2-VL-2B-Instruct/preprocessor_config.json
+[INFO|image_processing_base.py:423] 2026-09-26 22:48:43,570 >> Image processor Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "patch_size": 14,
+  "processor_class": "Qwen2VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,572 >> loading file vocab.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,572 >> loading file merges.txt
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,572 >> loading file tokenizer.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,572 >> loading file added_tokens.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,572 >> loading file special_tokens_map.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,572 >> loading file tokenizer_config.json
+[INFO|tokenization_utils_base.py:2065] 2026-09-26 22:48:43,573 >> loading file chat_template.jinja
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+[INFO|tokenization_utils_base.py:2336] 2026-09-26 22:48:43,875 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[WARNING|logging.py:328] 2026-09-26 22:48:43,876 >> You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+[INFO|video_processing_utils.py:718] 2026-09-26 22:48:43,876 >> loading configuration file models/Qwen2-VL-2B-Instruct/preprocessor_config.json
+[INFO|video_processing_utils.py:764] 2026-09-26 22:48:43,887 >> Video processor Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "size_divisor": null,
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+You have video processor config saved in `preprocessor.json` file which is deprecated. Video processor configs should be saved in their own `video_preprocessor.json` file. You can rename the file or load and save the processor back which renames it automatically. Loading from `preprocessor.json` will be removed in v5.0.
+[INFO|processing_utils.py:1117] 2026-09-26 22:48:44,300 >> Processor Qwen2VLProcessor:
+- image_processor: Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "patch_size": 14,
+  "processor_class": "Qwen2VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2TokenizerFast(name_or_path='models/Qwen2-VL-2B-Instruct', vocab_size=151643, model_max_length=32768, is_fast=True, padding_side='left', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|object_ref_start|>', '<|object_ref_end|>', '<|box_start|>', '<|box_end|>', '<|quad_start|>', '<|quad_end|>', '<|vision_start|>', '<|vision_end|>', '<|vision_pad|>', '<|image_pad|>', '<|video_pad|>']}, clean_up_tokenization_spaces=False, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+}
+)
+- video_processor: Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "size_divisor": null,
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "processor_class": "Qwen2VLProcessor"
+}
+
+[INFO|2026-09-26 22:48:44] llamafactory.data.loader:144 >> Loading dataset ../data/processed/sft_400k.clean.jsonl...
+[rank1]:[W926 22:48:44.169083573 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank5]:[W926 22:48:44.181430776 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 5]  using GPU 5 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank4]:[W926 22:48:44.209161811 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 4]  using GPU 4 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank2]:[W926 22:48:44.211360950 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank6]:[W926 22:48:44.231623731 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 6]  using GPU 6 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank3]:[W926 22:48:44.237062443 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+Converting format of dataset (num_proc=16):   0%|          | 0/399593 [00:00<?, ? examples/s]Converting format of dataset (num_proc=16):   0%|          | 17/399593 [00:00<1:09:00, 96.50 examples/s]Converting format of dataset (num_proc=16):   0%|          | 390/399593 [00:00<04:29, 1481.22 examples/s]Converting format of dataset (num_proc=16):   0%|          | 1750/399593 [00:00<01:08, 5777.42 examples/s]Converting format of dataset (num_proc=16):   1%|          | 4592/399593 [00:00<00:29, 13321.75 examples/s]Converting format of dataset (num_proc=16):   2%|▏         | 7365/399593 [00:00<00:21, 17891.72 examples/s]Converting format of dataset (num_proc=16):   3%|▎         | 10284/399593 [00:00<00:18, 21378.88 examples/s]Converting format of dataset (num_proc=16):   3%|▎         | 13270/399593 [00:00<00:16, 23999.23 examples/s]Converting format of dataset (num_proc=16):   4%|▍         | 15795/399593 [00:00<00:18, 20957.36 examples/s]Converting format of dataset (num_proc=16):   5%|▍         | 18209/399593 [00:01<00:17, 21825.02 examples/s]Converting format of dataset (num_proc=16):   5%|▌         | 21515/399593 [00:01<00:15, 24945.27 examples/s]Converting format of dataset (num_proc=16):   6%|▌         | 24425/399593 [00:01<00:14, 26129.94 examples/s]Converting format of dataset (num_proc=16):   7%|▋         | 27327/399593 [00:01<00:13, 26942.06 examples/s]Converting format of dataset (num_proc=16):   8%|▊         | 30083/399593 [00:01<00:15, 24511.36 examples/s]Converting format of dataset (num_proc=16):   8%|▊         | 32633/399593 [00:01<00:15, 24282.24 examples/s]Converting format of dataset (num_proc=16):   9%|▉         | 35174/399593 [00:01<00:14, 24424.07 examples/s]Converting format of dataset (num_proc=16):   9%|▉         | 37702/399593 [00:01<00:14, 24285.76 examples/s]Converting format of dataset (num_proc=16):  10%|█         | 40752/399593 [00:01<00:13, 26012.44 examples/s]Converting format of dataset (num_proc=16):  11%|█         | 43432/399593 [00:02<00:15, 23514.99 examples/s]Converting format of dataset (num_proc=16):  12%|█▏        | 46052/399593 [00:02<00:14, 24185.61 examples/s]Converting format of dataset (num_proc=16):  12%|█▏        | 48646/399593 [00:02<00:16, 21648.64 examples/s]Converting format of dataset (num_proc=16):  13%|█▎        | 50965/399593 [00:02<00:15, 21959.35 examples/s]Converting format of dataset (num_proc=16):  13%|█▎        | 53823/399593 [00:02<00:14, 23715.17 examples/s]Converting format of dataset (num_proc=16):  14%|█▍        | 56456/399593 [00:02<00:14, 24413.17 examples/s]Converting format of dataset (num_proc=16):  15%|█▍        | 59726/399593 [00:02<00:12, 26729.75 examples/s]Converting format of dataset (num_proc=16):  16%|█▌        | 62483/399593 [00:02<00:14, 22993.11 examples/s]Converting format of dataset (num_proc=16):  16%|█▋        | 64956/399593 [00:03<00:15, 21394.60 examples/s]Converting format of dataset (num_proc=16):  17%|█▋        | 67503/399593 [00:03<00:14, 22402.30 examples/s]Converting format of dataset (num_proc=16):  18%|█▊        | 69996/399593 [00:03<00:14, 23070.14 examples/s]Converting format of dataset (num_proc=16):  18%|█▊        | 73465/399593 [00:03<00:12, 26061.51 examples/s]Converting format of dataset (num_proc=16):  19%|█▉        | 76452/399593 [00:03<00:11, 27092.62 examples/s]Converting format of dataset (num_proc=16):  20%|█▉        | 79244/399593 [00:03<00:11, 26923.06 examples/s]Converting format of dataset (num_proc=16):  21%|██        | 81991/399593 [00:03<00:13, 24387.03 examples/s]Converting format of dataset (num_proc=16):  21%|██        | 84505/399593 [00:03<00:12, 24435.97 examples/s]Converting format of dataset (num_proc=16):  22%|██▏       | 87261/399593 [00:03<00:12, 25282.53 examples/s]Converting format of dataset (num_proc=16):  23%|██▎       | 90282/399593 [00:03<00:11, 26400.74 examples/s]Converting format of dataset (num_proc=16):  23%|██▎       | 93140/399593 [00:04<00:11, 27000.83 examples/s]Converting format of dataset (num_proc=16):  24%|██▍       | 95963/399593 [00:04<00:12, 24169.89 examples/s]Converting format of dataset (num_proc=16):  25%|██▍       | 98882/399593 [00:04<00:11, 25506.85 examples/s]Converting format of dataset (num_proc=16):  25%|██▌       | 101569/399593 [00:04<00:11, 25646.13 examples/s]Converting format of dataset (num_proc=16):  26%|██▌       | 104277/399593 [00:04<00:11, 25930.44 examples/s]Converting format of dataset (num_proc=16):  27%|██▋       | 107496/399593 [00:04<00:10, 27430.70 examples/s]Converting format of dataset (num_proc=16):  28%|██▊       | 110344/399593 [00:04<00:13, 22082.64 examples/s]Converting format of dataset (num_proc=16):  28%|██▊       | 112844/399593 [00:04<00:12, 22636.26 examples/s]Converting format of dataset (num_proc=16):  29%|██▉       | 115341/399593 [00:05<00:12, 23130.63 examples/s]Converting format of dataset (num_proc=16):  30%|██▉       | 118174/399593 [00:05<00:11, 24502.85 examples/s]Converting format of dataset (num_proc=16):  30%|███       | 120890/399593 [00:05<00:11, 25208.88 examples/s]Converting format of dataset (num_proc=16):  31%|███       | 124483/399593 [00:05<00:09, 28228.62 examples/s]Converting format of dataset (num_proc=16):  32%|███▏      | 127490/399593 [00:05<00:10, 25488.60 examples/s]Converting format of dataset (num_proc=16):  33%|███▎      | 130215/399593 [00:05<00:11, 22830.83 examples/s]Converting format of dataset (num_proc=16):  33%|███▎      | 133481/399593 [00:05<00:10, 25290.08 examples/s]Converting format of dataset (num_proc=16):  34%|███▍      | 136183/399593 [00:05<00:10, 25479.65 examples/s]Converting format of dataset (num_proc=16):  35%|███▌      | 139864/399593 [00:05<00:09, 28549.29 examples/s]Converting format of dataset (num_proc=16):  36%|███▌      | 142846/399593 [00:06<00:10, 25446.76 examples/s]Converting format of dataset (num_proc=16):  36%|███▋      | 145512/399593 [00:06<00:09, 25639.51 examples/s]Converting format of dataset (num_proc=16):  37%|███▋      | 148216/399593 [00:06<00:09, 25826.81 examples/s]Converting format of dataset (num_proc=16):  38%|███▊      | 151009/399593 [00:06<00:09, 25812.10 examples/s]Converting format of dataset (num_proc=16):  38%|███▊      | 153720/399593 [00:06<00:09, 25931.00 examples/s]Converting format of dataset (num_proc=16):  39%|███▉      | 156571/399593 [00:06<00:09, 26089.88 examples/s]Converting format of dataset (num_proc=16):  40%|███▉      | 159359/399593 [00:06<00:09, 24974.21 examples/s]Converting format of dataset (num_proc=16):  41%|████      | 161897/399593 [00:06<00:09, 25078.26 examples/s]Converting format of dataset (num_proc=16):  41%|████      | 164458/399593 [00:06<00:09, 25222.42 examples/s]Converting format of dataset (num_proc=16):  42%|████▏     | 167507/399593 [00:07<00:08, 26692.24 examples/s]Converting format of dataset (num_proc=16):  43%|████▎     | 170204/399593 [00:07<00:08, 26636.31 examples/s]Converting format of dataset (num_proc=16):  43%|████▎     | 173271/399593 [00:07<00:08, 27801.76 examples/s]Converting format of dataset (num_proc=16):  44%|████▍     | 176068/399593 [00:07<00:09, 24524.42 examples/s]Converting format of dataset (num_proc=16):  45%|████▍     | 178957/399593 [00:07<00:08, 25677.67 examples/s]Converting format of dataset (num_proc=16):  45%|████▌     | 181654/399593 [00:07<00:08, 25981.23 examples/s]Converting format of dataset (num_proc=16):  46%|████▌     | 184735/399593 [00:07<00:07, 27246.89 examples/s]Converting format of dataset (num_proc=16):  47%|████▋     | 187673/399593 [00:07<00:07, 27855.24 examples/s]Converting format of dataset (num_proc=16):  48%|████▊     | 190515/399593 [00:07<00:08, 24599.97 examples/s]Converting format of dataset (num_proc=16):  48%|████▊     | 193095/399593 [00:08<00:08, 24780.40 examples/s]Converting format of dataset (num_proc=16):  49%|████▉     | 196412/399593 [00:08<00:07, 27003.26 examples/s]Converting format of dataset (num_proc=16):  50%|████▉     | 199221/399593 [00:08<00:07, 27277.04 examples/s]Converting format of dataset (num_proc=16):  51%|█████     | 202220/399593 [00:08<00:07, 28040.88 examples/s]Converting format of dataset (num_proc=16):  51%|█████▏    | 205190/399593 [00:08<00:06, 28502.74 examples/s]Converting format of dataset (num_proc=16):  52%|█████▏    | 208138/399593 [00:08<00:07, 24513.63 examples/s]Converting format of dataset (num_proc=16):  53%|█████▎    | 211199/399593 [00:08<00:07, 26110.71 examples/s]Converting format of dataset (num_proc=16):  54%|█████▎    | 213984/399593 [00:08<00:07, 25970.33 examples/s]Converting format of dataset (num_proc=16):  54%|█████▍    | 217012/399593 [00:08<00:07, 25281.16 examples/s]Converting format of dataset (num_proc=16):  55%|█████▌    | 219812/399593 [00:09<00:06, 25901.36 examples/s]Converting format of dataset (num_proc=16):  56%|█████▌    | 222796/399593 [00:09<00:06, 26930.66 examples/s]Converting format of dataset (num_proc=16):  56%|█████▋    | 225606/399593 [00:09<00:06, 27099.10 examples/s]Converting format of dataset (num_proc=16):  57%|█████▋    | 228411/399593 [00:09<00:07, 24280.35 examples/s]Converting format of dataset (num_proc=16):  58%|█████▊    | 232334/399593 [00:09<00:05, 28143.77 examples/s]Converting format of dataset (num_proc=16):  59%|█████▉    | 235421/399593 [00:09<00:05, 28847.42 examples/s]Converting format of dataset (num_proc=16):  60%|█████▉    | 238429/399593 [00:09<00:06, 25658.04 examples/s]Converting format of dataset (num_proc=16):  60%|██████    | 241219/399593 [00:09<00:06, 26121.70 examples/s]Converting format of dataset (num_proc=16):  61%|██████    | 244034/399593 [00:09<00:05, 26634.85 examples/s]Converting format of dataset (num_proc=16):  62%|██████▏   | 247129/399593 [00:10<00:05, 27728.49 examples/s]Converting format of dataset (num_proc=16):  63%|██████▎   | 250467/399593 [00:10<00:05, 29329.12 examples/s]Converting format of dataset (num_proc=16):  63%|██████▎   | 253576/399593 [00:10<00:05, 26187.84 examples/s]Converting format of dataset (num_proc=16):  64%|██████▍   | 256703/399593 [00:10<00:05, 27537.55 examples/s]Converting format of dataset (num_proc=16):  65%|██████▍   | 259575/399593 [00:10<00:05, 26690.95 examples/s]Converting format of dataset (num_proc=16):  66%|██████▌   | 262714/399593 [00:10<00:05, 25750.14 examples/s]Converting format of dataset (num_proc=16):  66%|██████▋   | 265473/399593 [00:10<00:05, 26215.24 examples/s]Converting format of dataset (num_proc=16):  67%|██████▋   | 268254/399593 [00:10<00:04, 26527.96 examples/s]Converting format of dataset (num_proc=16):  68%|██████▊   | 271365/399593 [00:10<00:04, 27780.87 examples/s]Converting format of dataset (num_proc=16):  69%|██████▊   | 274414/399593 [00:11<00:04, 28541.05 examples/s]Converting format of dataset (num_proc=16):  69%|██████▉   | 277529/399593 [00:11<00:04, 25173.08 examples/s]Converting format of dataset (num_proc=16):  71%|███████   | 283518/399593 [00:11<00:03, 34275.86 examples/s]Converting format of dataset (num_proc=16):  72%|███████▏  | 287183/399593 [00:11<00:03, 31206.04 examples/s]Converting format of dataset (num_proc=16):  73%|███████▎  | 290497/399593 [00:11<00:03, 28255.20 examples/s]Converting format of dataset (num_proc=16):  73%|███████▎  | 293551/399593 [00:11<00:04, 25543.02 examples/s]Converting format of dataset (num_proc=16):  74%|███████▍  | 296277/399593 [00:11<00:04, 23091.13 examples/s]Converting format of dataset (num_proc=16):  75%|███████▍  | 298846/399593 [00:12<00:06, 16232.61 examples/s]Converting format of dataset (num_proc=16):  75%|███████▌  | 300882/399593 [00:12<00:08, 11622.50 examples/s]Converting format of dataset (num_proc=16):  76%|███████▌  | 302533/399593 [00:12<00:12, 8017.46 examples/s] Converting format of dataset (num_proc=16):  76%|███████▌  | 303873/399593 [00:13<00:11, 8217.55 examples/s]Converting format of dataset (num_proc=16):  76%|███████▋  | 305086/399593 [00:13<00:11, 8192.21 examples/s]Converting format of dataset (num_proc=16):  77%|███████▋  | 306717/399593 [00:13<00:09, 9496.58 examples/s]Converting format of dataset (num_proc=16):  77%|███████▋  | 308029/399593 [00:13<00:09, 10163.10 examples/s]Converting format of dataset (num_proc=16):  77%|███████▋  | 309267/399593 [00:13<00:08, 10594.91 examples/s]Converting format of dataset (num_proc=16):  78%|███████▊  | 310577/399593 [00:13<00:07, 11132.98 examples/s]Converting format of dataset (num_proc=16):  78%|███████▊  | 312409/399593 [00:13<00:06, 12903.86 examples/s]Converting format of dataset (num_proc=16):  79%|███████▊  | 314195/399593 [00:13<00:06, 14121.58 examples/s]Converting format of dataset (num_proc=16):  79%|███████▉  | 316376/399593 [00:14<00:05, 14503.52 examples/s]Converting format of dataset (num_proc=16):  80%|███████▉  | 318698/399593 [00:14<00:04, 16734.48 examples/s]Converting format of dataset (num_proc=16):  80%|████████  | 320966/399593 [00:14<00:04, 18321.31 examples/s]Converting format of dataset (num_proc=16):  81%|████████  | 323035/399593 [00:14<00:04, 18940.54 examples/s]Converting format of dataset (num_proc=16):  81%|████████▏ | 325063/399593 [00:14<00:03, 19227.92 examples/s]Converting format of dataset (num_proc=16):  82%|████████▏ | 327190/399593 [00:14<00:03, 19812.21 examples/s]Converting format of dataset (num_proc=16):  83%|████████▎ | 330138/399593 [00:14<00:03, 22611.59 examples/s]Converting format of dataset (num_proc=16):  83%|████████▎ | 332523/399593 [00:14<00:02, 22924.08 examples/s]Converting format of dataset (num_proc=16):  84%|████████▍ | 334878/399593 [00:14<00:03, 19844.72 examples/s]Converting format of dataset (num_proc=16):  84%|████████▍ | 337494/399593 [00:15<00:03, 19431.10 examples/s]Converting format of dataset (num_proc=16):  85%|████████▌ | 339699/399593 [00:15<00:02, 20097.93 examples/s]Converting format of dataset (num_proc=16):  86%|████████▌ | 342037/399593 [00:15<00:02, 20971.91 examples/s]Converting format of dataset (num_proc=16):  86%|████████▌ | 344434/399593 [00:15<00:02, 21785.96 examples/s]Converting format of dataset (num_proc=16):  87%|████████▋ | 346674/399593 [00:15<00:02, 21814.14 examples/s]Converting format of dataset (num_proc=16):  87%|████████▋ | 349054/399593 [00:15<00:02, 22235.92 examples/s]Converting format of dataset (num_proc=16):  88%|████████▊ | 351394/399593 [00:15<00:02, 22568.33 examples/s]Converting format of dataset (num_proc=16):  89%|████████▊ | 353725/399593 [00:15<00:02, 20146.82 examples/s]Converting format of dataset (num_proc=16):  89%|████████▉ | 356074/399593 [00:15<00:02, 21025.30 examples/s]Converting format of dataset (num_proc=16):  90%|████████▉ | 358325/399593 [00:15<00:02, 19683.40 examples/s]Converting format of dataset (num_proc=16):  90%|█████████ | 360490/399593 [00:16<00:02, 19237.63 examples/s]Converting format of dataset (num_proc=16):  91%|█████████ | 363164/399593 [00:16<00:01, 21226.77 examples/s]Converting format of dataset (num_proc=16):  92%|█████████▏| 365739/399593 [00:16<00:01, 19852.66 examples/s]Converting format of dataset (num_proc=16):  92%|█████████▏| 368836/399593 [00:16<00:01, 22716.00 examples/s]Converting format of dataset (num_proc=16):  93%|█████████▎| 371224/399593 [00:16<00:01, 20254.63 examples/s]Converting format of dataset (num_proc=16):  93%|█████████▎| 373402/399593 [00:16<00:01, 20605.24 examples/s]Converting format of dataset (num_proc=16):  94%|█████████▍| 375805/399593 [00:16<00:01, 21392.34 examples/s]Converting format of dataset (num_proc=16):  95%|█████████▌| 380145/399593 [00:16<00:00, 27322.47 examples/s]Converting format of dataset (num_proc=16):  96%|█████████▌| 383085/399593 [00:17<00:00, 23303.69 examples/s]Converting format of dataset (num_proc=16):  97%|█████████▋| 385642/399593 [00:17<00:00, 20098.25 examples/s]Converting format of dataset (num_proc=16):  97%|█████████▋| 388034/399593 [00:17<00:00, 17039.25 examples/s]Converting format of dataset (num_proc=16):  98%|█████████▊| 389989/399593 [00:17<00:00, 15088.59 examples/s]Converting format of dataset (num_proc=16):  98%|█████████▊| 391758/399593 [00:17<00:00, 13471.63 examples/s]Converting format of dataset (num_proc=16):  98%|█████████▊| 393318/399593 [00:17<00:00, 12628.84 examples/s]Converting format of dataset (num_proc=16):  99%|█████████▉| 394731/399593 [00:18<00:00, 11718.27 examples/s]Converting format of dataset (num_proc=16):  99%|█████████▉| 396043/399593 [00:18<00:00, 11605.31 examples/s]Converting format of dataset (num_proc=16):  99%|█████████▉| 397292/399593 [00:18<00:00, 11321.44 examples/s]Converting format of dataset (num_proc=16): 100%|█████████▉| 398486/399593 [00:18<00:00, 10624.78 examples/s]Converting format of dataset (num_proc=16): 100%|██████████| 399593/399593 [00:18<00:00, 7979.13 examples/s] Converting format of dataset (num_proc=16): 100%|██████████| 399593/399593 [00:19<00:00, 21007.35 examples/s]
+[rank0]:[W926 22:49:09.866137126 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+NCCL version 2.21.5+cuda12.4
+Running tokenizer on dataset (num_proc=16):   0%|          | 0/399593 [00:00<?, ? examples/s]W0926 22:55:51.407000 1259354 torch/distributed/elastic/agent/server/api.py:719] Received 15 death signal, shutting down workers
+W0926 22:55:51.413000 1259354 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1259385 closing signal SIGTERM
+W0926 22:55:51.504000 1259354 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1259386 closing signal SIGTERM
+W0926 22:55:51.505000 1259354 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1259387 closing signal SIGTERM
+W0926 22:55:51.601000 1259354 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1259388 closing signal SIGTERM
+W0926 22:55:51.603000 1259354 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1259389 closing signal SIGTERM
+W0926 22:55:51.605000 1259354 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1259390 closing signal SIGTERM
+W0926 22:55:51.606000 1259354 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 1259391 closing signal SIGTERM
+Traceback (most recent call last):
+  File "/home/ml-user/workdir/project-2/.venv-lf/bin/torchrun", line 10, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 260, in launch_agent
+    result = agent.run()
+             ^^^^^^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/elastic/metrics/api.py", line 137, in wrapper
+    result = f(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/elastic/agent/server/api.py", line 711, in run
+    result = self._invoke_run(role)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/elastic/agent/server/api.py", line 870, in _invoke_run
+    time.sleep(monitor_interval)
+  File "/home/ml-user/workdir/project-2/.venv-lf/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/api.py", line 84, in _terminate_process_handler
+    raise SignalException(f"Process {os.getpid()} got signal: {sigval}", sigval=sigval)
+torch.distributed.elastic.multiprocessing.api.SignalException: Process 1259354 got signal: 15

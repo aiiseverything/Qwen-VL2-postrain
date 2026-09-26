@@ -1,0 +1,64 @@
+# ============================================================================
+# DPO —— 7 卡版本
+# ----------------------------------------------------------------------------
+# PLAN 原定:  per_device 1 × accum 16 × 4 卡 = global 64
+# 本 7 卡版:  per_device 1 × accum 9  × 7 卡 = global 63  ← 与 64 等价
+#
+# ⚠️ DPO 对学习率**极其敏感** (见 docs/02 C2):
+#    lr 用 5e-7 (比 SFT 低 20 倍)。用 SFT 量级会直接把模型训崩。
+#    监控指标: rewards/accuracies 应落在 0.5–0.8; 迅速冲到 1.0 = lr 太大。
+#
+# 数据: 5,731 对 (RLHF-V)。LLaVA-RLHF 无显式 chosen/rejected 标注,
+#       未强行合成 (见 docs/05 P15 / HANDOFF §3.1)。
+# ============================================================================
+
+### 模型 —— 基于 SFT 产物
+model_name_or_path: results/checkpoints/sft     # ★ R7
+template: qwen2_vl
+trust_remote_code: true
+
+stage: dpo
+do_train: true
+finetuning_type: full
+pref_beta: 0.1                          # KL 约束强度
+pref_loss: sigmoid
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+
+### 数据
+dataset: postrain_dpo                   # -> data/processed/dpo_10k.jsonl
+dataset_dir: configs
+cutoff_len: 4096
+preprocessing_num_workers: 16
+dataloader_num_workers: 8
+
+### 视觉输入 (与 SFT 保持一致)
+image_max_pixels: 262144
+image_min_pixels: 1024
+video_max_pixels: 16384
+video_fps: 2.0
+video_maxlen: 32
+
+### 批与优化
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 9          # global batch = 1 × 9 × 7 = 63
+learning_rate: 5.0e-7                   # ★ 远低于 SFT
+num_train_epochs: 1.0                   # ★ R7
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+max_grad_norm: 1.0
+optim: adamw_torch
+bf16: true
+gradient_checkpointing: true
+
+### 分布式
+deepspeed: configs/ds_zero2.json
+ddp_timeout: 180000000
+
+### 日志与存档
+output_dir: results/checkpoints/dpo
+logging_steps: 5
+save_steps: 200
+save_total_limit: 3
+plot_loss: true
+report_to: none

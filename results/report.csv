@@ -1,0 +1,13 @@
+model,bench,score,delta_vs_base,judging,source_file
+pretrained,MME,,,官方协议（是/否二元题，accuracy + accuracy+）,
+pretrained,MathVista,,,⚠️ **规则抽取判分（非官方）** —— 无 OpenAI API key，**分数不可与论文数字直接比较**（PLAN K6）,
+pretrained,Video-MME,,,VLMEvalKit 默认抽帧；⚠️ 四个模型必须用**同一抽帧策略**,
+sft,MME,,,官方协议（是/否二元题，accuracy + accuracy+）,
+sft,MathVista,,,⚠️ **规则抽取判分（非官方）** —— 无 OpenAI API key，**分数不可与论文数字直接比较**（PLAN K6）,
+sft,Video-MME,,,VLMEvalKit 默认抽帧；⚠️ 四个模型必须用**同一抽帧策略**,
+dpo,MME,,,官方协议（是/否二元题，accuracy + accuracy+）,
+dpo,MathVista,,,⚠️ **规则抽取判分（非官方）** —— 无 OpenAI API key，**分数不可与论文数字直接比较**（PLAN K6）,
+dpo,Video-MME,,,VLMEvalKit 默认抽帧；⚠️ 四个模型必须用**同一抽帧策略**,
+grpo,MME,,,官方协议（是/否二元题，accuracy + accuracy+）,
+grpo,MathVista,,,⚠️ **规则抽取判分（非官方）** —— 无 OpenAI API key，**分数不可与论文数字直接比较**（PLAN K6）,
+grpo,Video-MME,,,VLMEvalKit 默认抽帧；⚠️ 四个模型必须用**同一抽帧策略**,

@@ -1,0 +1,22 @@
+{
+  "model": {
+    "pretrained": {
+      "class": "Qwen2VLChat",
+      "model_path": "/home/ml-user/workdir/project-2/models/Qwen2-VL-2B-Instruct",
+      "attn_implementation": "sdpa",
+      "max_new_tokens": 2048,
+      "verbose": false
+    }
+  },
+  "data": {
+    "MME": {
+      "class": "ImageYORNDataset"
+    },
+    "MathVista_MINI": {
+      "class": "MathVista"
+    },
+    "Video-MME": {
+      "class": "VideoMME"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "//": "DeepSpeed ZeRO-2 —— R5 要求。选 ZeRO-2 而非 ZeRO-3 的理由见 PLAN D2:",
+  "//2": "L40 为 PCIe 卡无 NVLink, ZeRO-3 每步 all-gather 全参数会成为带宽瓶颈;",
+  "//3": "Qwen2-VL-2B 在 ZeRO-2 下显存充裕 (估算见 docs/03 §显存)。",
+  "bf16": {
+    "enabled": true
+  },
+  "fp16": {
+    "enabled": false
+  },
+  "zero_optimization": {
+    "stage": 2,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 5e8,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 5e8,
+    "contiguous_gradients": true,
+    "stage3_prefetch_bucket_size": 0,
+    "stage3_param_persistence_threshold": 0
+  },
+  "gradient_accumulation_steps": "auto",
+  "gradient_clipping": "auto",
+  "steps_per_print": 10,
+  "train_batch_size": "auto",
+  "train_micro_batch_size_per_gpu": "auto",
+  "wall_clock_breakdown": false,
+  "zero_allow_untested_optimizer": true,
+  "comms_logger": {
+    "enabled": false
+  }
+}

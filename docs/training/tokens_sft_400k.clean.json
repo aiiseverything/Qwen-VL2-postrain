@@ -1,0 +1,42 @@
+{
+  "file": "/home/ml-user/workdir/project-2/data/processed/sft_400k.clean.jsonl",
+  "n": 8000,
+  "full": false,
+  "text_tokens": {
+    "mean": 175.316125,
+    "p50": 138,
+    "p95": 419,
+    "max": 918,
+    "total": 1402529
+  },
+  "visual_tokens": {
+    "mean": 284.797375,
+    "p50": 308,
+    "p95": 323,
+    "max": 330,
+    "total": 2278379
+  },
+  "total_tokens": {
+    "mean": 460.1135,
+    "total": 3680908
+  },
+  "n_image_samples": 6916,
+  "n_video_samples": 1084,
+  "by_source": {
+    "llava665k": {
+      "n": 5922,
+      "text_mean": 187.9209726443769,
+      "visual_mean": 281.9760216143195
+    },
+    "videoinstruct": {
+      "n": 1084,
+      "text_mean": 79.33579335793358,
+      "visual_mean": 288.0
+    },
+    "sharegpt4v": {
+      "n": 994,
+      "text_mean": 204.89034205231388,
+      "visual_mean": 298.11368209255534
+    }
+  }
+}

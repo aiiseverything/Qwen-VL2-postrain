@@ -1,0 +1,55 @@
+# ============================================================================
+# 吞吐/显存校准 (PLAN Phase 7.4)
+# ----------------------------------------------------------------------------
+# 目的: 在放全量 40 万条之前, 用少量样本实测两件事:
+#   1. **per_device_train_batch_size=4 在 46 GB 卡上放得下吗** (这是最容易 OOM 的点)
+#   2. 每 step 耗时 -> 外推全量训练总时长
+#
+# 用 --max_samples 512 + --max_steps 20, 几分钟就能跑完。
+# ============================================================================
+model_name_or_path: models/Qwen2-VL-2B-Instruct
+template: qwen2_vl
+trust_remote_code: true
+
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+
+dataset: postrain_sft_unfiltered     # 校准不依赖去污染结果, 用未过滤的即可
+dataset_dir: configs
+cutoff_len: 4096
+max_samples: 1024                     # 只取 512 条
+preprocessing_num_workers: 8
+dataloader_num_workers: 4
+
+image_max_pixels: 262144
+video_max_pixels: 16384
+video_fps: 2.0
+video_maxlen: 32        # ★ 默认 128 帧会撑爆 cutoff_len
+image_min_pixels: 1024
+
+per_device_train_batch_size: 4        # ★ 要与正式配置一致, 否则显存结论无意义
+gradient_accumulation_steps: 5   # 7 卡下 global batch = 4×5×7 = 140
+learning_rate: 1.0e-5
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+max_grad_norm: 1.0
+optim: adamw_torch
+bf16: true
+gradient_checkpointing: true
+
+deepspeed: configs/ds_zero2.json
+ddp_timeout: 180000000
+
+output_dir: results/calib/sft_b4
+overwrite_output_dir: true   # ★ P35: 校准是丢弃式的, 不让 LLaMA-Factory 静默续训旧 checkpoint
+                            #   (不同卡数的 ZeRO checkpoint 无法互载, 会硬失败)
+logging_steps: 1
+save_steps: 100000
+save_total_limit: 1
+plot_loss: false
+report_to: none
+max_steps: 20
