@@ -25,7 +25,7 @@ git apply /home/ml-user/workdir/project-2/env/patches/<名字>.patch
 关键在于**只有真正解码视频才会涨** —— 所以 4 小时的 tokenize 阶段
 （只读 jsonl）和纯图像数据都看不出异常，只有训练跑起来才暴露。
 
-**实测**（40 个真实视频，复刻 `mm_plugin` 的解码模式，`/tmp/leak_test.py`）：
+**实测**（40 个真实视频，复刻 `mm_plugin` 的解码模式，`scripts/training/leak_test_plugin_paths.py`（video 模式））：
 
 | 变体 | 40 个视频后 RSS | 每视频增长 | 推算每优化步 |
 |---|---|---|---|
