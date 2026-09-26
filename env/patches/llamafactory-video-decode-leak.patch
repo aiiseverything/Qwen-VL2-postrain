@@ -1,0 +1,56 @@
+diff --git a/src/llamafactory/data/mm_plugin.py b/src/llamafactory/data/mm_plugin.py
+index 5cf0cca..95f40d0 100644
+--- a/src/llamafactory/data/mm_plugin.py
++++ b/src/llamafactory/data/mm_plugin.py
+@@ -1943,24 +1943,33 @@ class Qwen2VLPlugin(BasePlugin):
+                 frames_indices.append(list(range(len(frames))))
+             else:
+                 container = av.open(video, "r")
+-                video_stream = next(stream for stream in container.streams if stream.type == "video")
+-                sample_indices = self._get_video_sample_indices(video_stream, **kwargs)
+-                original_fps = float(video_stream.average_rate)
+-                # for qwen3vl video timestamp calculation
+-                frames_indices.append(
+-                    [idx / original_fps * kwargs.get("video_fps", 2.0) for idx in sample_indices]
+-                )  # hack usage when do_sample_frames=False
+-                container.seek(0)
+-                for frame_idx, frame in enumerate(container.decode(video_stream)):
+-                    if frame_idx in sample_indices:
+-                        frames.append(frame.to_image())
+-
+-                if video_stream.duration is None:
+-                    fps_per_video.append(kwargs.get("video_fps", 2.0))
+-                    durations.append(len(frames) / kwargs.get("video_fps", 2.0))
+-                else:
+-                    fps_per_video.append(len(sample_indices) / float(video_stream.duration * video_stream.time_base))
+-                    durations.append(float(video_stream.duration * video_stream.time_base))
++                # ★★★ 本地补丁 (2026-09-27, 见 docs/05 P41) ★★★
++                # 原代码在这里解码视频后**从不关闭 container**, 导致每个视频泄漏
++                # ~2.6MB 的 PyAV 解码缓冲。训练时 7 个 dataloader worker 各自线性增长
++                # (~12MB/min/worker), 几小时就撑爆 64GiB 容器 —— 实测 40 个视频
++                # 2.61 MB/视频 → 加 close 后 0.04 MB/视频 (60x)。
++                # 用 try/finally 是因为坏视频会抛 ValueError, 也必须释放。
++                try:
++                    video_stream = next(stream for stream in container.streams if stream.type == "video")
++                    sample_indices = self._get_video_sample_indices(video_stream, **kwargs)
++                    original_fps = float(video_stream.average_rate)
++                    # for qwen3vl video timestamp calculation
++                    frames_indices.append(
++                        [idx / original_fps * kwargs.get("video_fps", 2.0) for idx in sample_indices]
++                    )  # hack usage when do_sample_frames=False
++                    container.seek(0)
++                    for frame_idx, frame in enumerate(container.decode(video_stream)):
++                        if frame_idx in sample_indices:
++                            frames.append(frame.to_image())
++
++                    if video_stream.duration is None:
++                        fps_per_video.append(kwargs.get("video_fps", 2.0))
++                        durations.append(len(frames) / kwargs.get("video_fps", 2.0))
++                    else:
++                        fps_per_video.append(len(sample_indices) / float(video_stream.duration * video_stream.time_base))
++                        durations.append(float(video_stream.duration * video_stream.time_base))
++                finally:
++                    container.close()
+ 
+             if len(frames) % 2 != 0:
+                 frames.append(frames[-1])
