@@ -31,11 +31,54 @@ BENCH = ["MME", "MathVista", "Video-MME"]
 HAS_OPENAI_KEY = bool(os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENAI_KEY"))
 
 
-def read_score(model: str, bench: str):
-    d = EVAL_DIR / model / bench
-    if not d.is_dir():
+def _latest_run_dir(bench: str, model: str):
+    """VLMEvalKit 的实际落盘结构是 results/eval/<bench>/<model>/T<时间戳>/
+
+    ★ 2026-09-28 修: 原来是 EVAL_DIR/<model>/<bench> —— **路径写反了**,
+    d.is_dir() 恒为 False, 于是所有分数都收集不到, 报告里全是「—」。
+    （MME 其实三个模型都跑成功了, 见 results/eval/MME/<model>/T*/ 里的 score.csv）
+    """
+    base = EVAL_DIR / bench / model
+    if not base.is_dir():
         return None
-    # VLMEvalKit 一般产出一个 <model>_<bench>.csv / .xlsx 或 acc 文本
+    runs = sorted([p for p in base.glob("T*") if p.is_dir()], reverse=True)
+    return runs[0] if runs else base
+
+
+def read_score(model: str, bench: str):
+    """返回 (主分数, 来源文件, 明细说明)。找不到返回 (None, "", "")
+
+    ★ MME 的 VLMEvalKit 产物 <model>_MME_score.csv 是**纯数字表**
+    （表头是类别名, 数据行是对应分数, 没有任何 acc/score 字样）,
+    原来那条靠关键词匹配的通用解析认不出来 —— 现在按类别名精确取。
+    """
+    d = _latest_run_dir(bench, model)
+    if d is None:
+        return None, "", ""
+
+    if bench == "MME":
+        for f in sorted(d.glob("*_MME_score.csv")):
+            try:
+                with open(f, newline="") as fh:
+                    rdr = csv.reader(fh)
+                    head = next(rdr, [])
+                    vals = next(rdr, [])
+            except (OSError, StopIteration, csv.Error):
+                continue
+            got = {}
+            for k, v in zip(head, vals):
+                try:
+                    got[k.strip().strip('"').lower()] = float(v)
+                except (TypeError, ValueError):
+                    pass
+            # 官方 MME 报两个聚合分: perception(10 类, 满分 2000) / reasoning(4 类, 满分 800)
+            if "perception" in got:
+                detail = (f"perception {got['perception']:.2f}/2000"
+                          + (f"; reasoning {got['reasoning']:.2f}/800" if "reasoning" in got else ""))
+                return got["perception"], f.name, detail
+        return None, "", ""
+
+    # 其余 benchmark: 沿用关键词解析 (带 acc/accuracy/score 字样的产物)
     for pat in ("*.csv", "*.json", "*.txt"):
         for f in sorted(d.glob(pat)):
             try:
@@ -44,8 +87,8 @@ def read_score(model: str, bench: str):
                 continue
             m = re.search(r"(?:acc|accuracy|score)[^0-9]*([0-9]+\.[0-9]+)", txt, re.I)
             if m:
-                return float(m.group(1)), f.name
-    return None
+                return float(m.group(1)), f.name, ""
+    return None, "", ""
 
 
 def contamination_note() -> str:
@@ -80,10 +123,9 @@ def main():
     rows = []
     for m in MODELS:
         for b in BENCH:
-            r = read_score(m, b)
-            rows.append({"model": m, "bench": b,
-                         "score": r[0] if r else None,
-                         "source_file": r[1] if r else "",
+            score, src, detail = read_score(m, b)
+            rows.append({"model": m, "bench": b, "score": score,
+                         "source_file": src, "detail": detail,
                          "judging": judging_note(b)})
 
     # 相对基线
@@ -94,8 +136,8 @@ def main():
                               else round(r["score"] - bs, 3))
 
     with open(OUT_CSV, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["model", "bench", "score",
-                                          "delta_vs_base", "judging", "source_file"])
+        w = csv.DictWriter(f, fieldnames=["model", "bench", "score", "delta_vs_base",
+                                          "detail", "judging", "source_file"])
         w.writeheader()
         for r in rows:
             w.writerow(r)
@@ -116,8 +158,14 @@ def main():
                 cells.append(f"{r['score']:.3f}" + (f" ({d:+.3f})" if d is not None else ""))
         L.append(f"| **{m}** | " + " | ".join(cells) + " |")
 
-    L += ["\n> 括号内为相对 `pretrained` 基线的增减。\n",
-          "\n## 2. 判分方式（必须逐项标注）\n",
+    L += ["\n> 括号内为相对 `pretrained` 基线的增减。\n"]
+    # 有明细的 (如 MME 的 perception/reasoning 双聚合分) 单独列出来, 免得丢信息
+    details = [f"- **{r['model']} · {r['bench']}**：{r['detail']}"
+               for r in rows if r["detail"]]
+    if details:
+        L += ["", "实测明细（聚合分口径）：", *details, ""]
+
+    L += ["\n## 2. 判分方式（必须逐项标注）\n",
           "| Benchmark | 判分方式 |", "|---|---|"]
     for b in BENCH:
         L.append(f"| {b} | {judging_note(b)} |")
@@ -133,7 +181,7 @@ def main():
           "\n## 5. 复现信息\n",
           f"- 训练数据: `data/processed/sft_400k.clean.jsonl`",
           f"- 评测工具: VLMEvalKit（四个模型统一）",
-          f"- 原始输出: `results/eval/<model>/<bench>/`"]
+          f"- 原始输出: `results/eval/<bench>/<model>/T<时间戳>/`"]
 
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L) + "\n", encoding="utf-8")

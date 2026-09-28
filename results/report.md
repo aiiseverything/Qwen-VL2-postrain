@@ -7,12 +7,18 @@
 
 | 模型 | MME | MathVista | Video-MME |
 |---|---|---|---|
-| **pretrained** | — | — | — |
-| **sft** | — | — | — |
-| **dpo** | — | — | — |
+| **pretrained** | 1492.712 (+0.000) | — | — |
+| **sft** | 1536.296 (+43.584) | — | — |
+| **dpo** | 1547.457 (+54.745) | — | — |
 | **grpo** | — | — | — |
 
 > 括号内为相对 `pretrained` 基线的增减。
+
+
+实测明细（聚合分口径）：
+- **pretrained · MME**：perception 1492.71/2000; reasoning 456.43/800
+- **sft · MME**：perception 1536.30/2000; reasoning 457.14/800
+- **dpo · MME**：perception 1547.46/2000; reasoning 450.36/800
 
 
 ## 2. 判分方式（必须逐项标注）
@@ -38,4 +44,4 @@ _（本节省略 = 未如实评估。请逐条填写：哪些指标没涨、为�
 
 - 训练数据: `data/processed/sft_400k.clean.jsonl`
 - 评测工具: VLMEvalKit（四个模型统一）
-- 原始输出: `results/eval/<model>/<bench>/`
+- 原始输出: `results/eval/<bench>/<model>/T<时间戳>/`
