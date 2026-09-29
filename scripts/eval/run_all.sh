@@ -65,19 +65,58 @@ fi
 FAILED=()
 for d in $DATA; do
   work="$OUT/$d"
-  if [[ -f "$work/DONE" ]]; then log "已完成, 跳过: $d"; continue; fi
   mkdir -p "$work"
   cfg_d="$PROJECT_ROOT/configs/vlmeval_${d}.json"
+  # ★ 2026-09-29 修: 原来**没传 --models** ⇒ make_vlmeval_config.py 默认"所有存在的模型目录"，
+  #   于是 run_all.sh 顶部的 MODELS 变量形同虚设 —— 想只评测 base 一个模型也会把 5 个全跑一遍
+  #   （8+ 小时），而且模型集一变 DONE 标记名也变。
   if ! "$VENV/bin/python" scripts/eval/make_vlmeval_config.py \
-        --datasets "$d" --out "$cfg_d" >/dev/null; then
+        --datasets "$d" --models $MODELS --out "$cfg_d" >/dev/null; then
     warn "跳过 $d: 生成配置失败（可能没有可用模型目录）"; FAILED+=("$d/无模型"); continue
   fi
-  log "评测数据集: $d"
+
+  # ★ 2026-09-29 修（两个 bug，都会让评测**静默地不产出**）：
+  #   bug1 原来的 DONE 只看数据集名（$work/$d）⇒ **换模型集也会整块跳过**。
+  #        实测事故：09-23 的 pretrained-only Video-MME 留了 DONE，
+  #        导致 09-28 的 sft/dpo/grpo Video-MME 一个都没跑（日志只有一行"已完成, 跳过"）。
+  #        ⇒ 现在把标记名绑到**模型配置的内容哈希**：模型集一变，标记名就变，会重跑。
+  #   bug2 原来只要 run.py 退 0 就打 DONE，而 MathVista 判分 100% 失败时它照样退 0
+  #        ⇒ 修好判分后也会被跳过。现在**必须真的产出 *_score* 文件**才算完成。
+  SLUG=$(md5sum "$cfg_d" | cut -c1-8)
+  DONE_FILE="$work/DONE.$SLUG"
+  if [[ -f "$DONE_FILE" ]]; then log "已完成(同模型集 $SLUG), 跳过: $d"; continue; fi
+
+  log "评测数据集: $d  (模型集 ${SLUG})"
+  # ★ 2026-09-29 加: 判分模型的显式指定。
+  #   背景: vlmeval 的默认判分模型是 gpt-4o-mini（videomme.py:61 DEFAULT_JUDGE_MODEL），
+  #   而本项目可用的 relay（xmapi）上**没有 gpt-4 系列**，只有 gpt-5.x / gpt-6
+  #   ⇒ 必须显式指定，否则 judge_fail_rate 100%（实测 MathVista 1000/1000 全失败）。
+  #   密钥走 third_party/VLMEvalKit/.env（third_party/ 在 .gitignore 里，不会进仓库）。
+  #   JUDGE_MODEL 可用环境变量覆盖；传 exact_matching 则用纯规则判分（不调 API）。
+  # ★ 只传 --judge（模型名）。**不要**传 --judge-base-url：
+  #   run.py:396 是 `f"{judge_base_url.rstrip('/')}/chat/completions"` —— 它会自己拼后缀，
+  #   而 OPENAI_API_BASE 约定的是**完整端点**（见 vlmeval/api/gpt.py:16 的 APIBASES['OFFICIAL']）。
+  #   两者同时用会拼成 .../chat/completions/chat/completions（实测报 JSONDecodeError）。
+  #   ⇒ 端点与密钥统一走 third_party/VLMEvalKit/.env，这里只覆盖模型名。
+  JUDGE_MODEL="${JUDGE_MODEL:-gpt-5.5}"
+  JUDGE_ARGS=(--judge "$JUDGE_MODEL")
+  log "判分模型: $JUDGE_MODEL（端点/密钥取自 VLMEvalKit/.env）"
   if "$VENV/bin/python" "$VLMEVAL_ROOT/run.py" \
         --config "$cfg_d" \
         --work-dir "$work" \
+        "${JUDGE_ARGS[@]}" \
         --mode all 2>&1 | tee "$work/run.log"; then
-    touch "$work/DONE"; log "✅ $d 完成"
+    # 产物形如 $work/<model>/T<时间戳>/<model>_<bench>_score*.csv|json
+    # ★ 2026-09-29 修: 原来用 "$work/*/*_score*" —— 会被**别的模型的旧分数文件**骗过
+    #   （扁平化的历史产物就在 <bench>/<model>/ 下），于是跑崩了也照样打 ✅。
+    #   现在只看"这一轮真正写出的最新运行目录"。
+    newest_run=$(ls -1dt "$work"/*/T* 2>/dev/null | head -1)
+    if [[ -n "$newest_run" ]] && compgen -G "$newest_run/*_score*" >/dev/null; then
+      touch "$DONE_FILE"; log "✅ $d 完成"
+    else
+      warn "❌ $d 跑完了但没有任何 *_score* 产物（判分可能全失败）—— 不打 DONE，可重跑"
+      FAILED+=("$d/无分数")
+    fi
   else
     warn "❌ $d 失败 (日志: $work/run.log)"; FAILED+=("$d")
   fi

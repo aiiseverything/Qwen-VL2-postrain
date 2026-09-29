@@ -2,6 +2,7 @@
 models/
 data/raw/
 data/processed/
+data/cache/          # ★ 2026-09-29: tokenized 数据集(2.7GB), 曾误提交导致 push 卡死
 third_party/
 results/checkpoints/
 results/eval/

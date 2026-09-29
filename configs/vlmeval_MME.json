@@ -1,22 +1,8 @@
 {
   "model": {
-    "pretrained": {
+    "base": {
       "class": "Qwen2VLChat",
-      "model_path": "/home/ml-user/workdir/project-2/models/Qwen2-VL-2B-Instruct",
-      "attn_implementation": "sdpa",
-      "max_new_tokens": 2048,
-      "verbose": false
-    },
-    "sft": {
-      "class": "Qwen2VLChat",
-      "model_path": "/home/ml-user/workdir/project-2/results/checkpoints/sft",
-      "attn_implementation": "sdpa",
-      "max_new_tokens": 2048,
-      "verbose": false
-    },
-    "dpo": {
-      "class": "Qwen2VLChat",
-      "model_path": "/home/ml-user/workdir/project-2/results/checkpoints/dpo",
+      "model_path": "/home/ml-user/workdir/project-2/models/Qwen2-VL-2B",
       "attn_implementation": "sdpa",
       "max_new_tokens": 2048,
       "verbose": false

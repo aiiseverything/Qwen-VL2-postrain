@@ -25,8 +25,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 MODEL_PATHS = {
+    "base":       "models/Qwen2-VL-2B",             # ★ 2026-09-29: 真·预训练基座（无 -Instruct）
+                                                   #   只作参照：它没有 chat template、不按对话格式
+                                                   #   回答，用同一套 prompt 评测天然吃亏
     "pretrained": "models/Qwen2-VL-2B-Instruct",
     "sft":        "results/checkpoints/sft",
+    "sft_ep3":    "results/checkpoints/sft_ep3",   # ★ 2026-09-29: 在 SFT 上再训 1 epoch（共 3）
+                                                   #   用于「多训一轮有没有收益」的对比分析
     "dpo":        "results/checkpoints/dpo",
     "grpo":       "results/checkpoints/grpo",
 }

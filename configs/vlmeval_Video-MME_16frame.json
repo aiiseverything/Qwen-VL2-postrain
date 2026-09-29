@@ -1,8 +1,8 @@
 {
   "model": {
-    "pretrained": {
+    "base": {
       "class": "Qwen2VLChat",
-      "model_path": "/home/ml-user/workdir/project-2/models/Qwen2-VL-2B-Instruct",
+      "model_path": "/home/ml-user/workdir/project-2/models/Qwen2-VL-2B",
       "attn_implementation": "sdpa",
       "max_new_tokens": 2048,
       "verbose": false
