@@ -30,7 +30,9 @@ dataset: postrain_dpo                   # -> data/processed/dpo_10k.jsonl
 dataset_dir: configs
 cutoff_len: 4096
 preprocessing_num_workers: 16
-dataloader_num_workers: 8
+dataloader_num_workers: 1   # ★ 2026-09-30 修: 原来沿用旧值 8（=56 个 worker）
+                                      #   ⇒ host anon 8 分钟涨 17GB 撞破 64GiB，DPO 挂死在 step64/91。
+                                      #   依据: docs/02 C6 + 本次取证工作流实测对照
 
 ### 视觉输入 (与 SFT 保持一致)
 image_max_pixels: 262144

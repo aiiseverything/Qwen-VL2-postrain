@@ -8,6 +8,7 @@
 | 模型 | MME | MathVista | Video-MME |
 |---|---|---|---|
 | **base(未指令微调)** | — | — | — |
+| **base+sft** | 1418.310 (-74.403) | 43.600 (-5.600) | 58.200 (-1.800) |
 | **instruct(官方)** | 1492.712 (+0.000) | 49.200 (+0.000) | 60.000 (+0.000) |
 | **sft** | 1536.296 (+43.584) | 47.100 (-2.100) | 57.300 (-2.700) |
 | **sft_ep3** | 1505.771 (+13.059) | 47.500 (-1.700) | 57.600 (-2.400) |
@@ -27,6 +28,8 @@
 
 
 实测明细（聚合分口径）：
+- **base_sft · MME**：perception 1418.31/2000; reasoning 377.86/800
+- **base_sft · Video-MME**：Video-MME 分档正确率: short 58.2%; medium nan%; long nan%
 - **pretrained · MME**：perception 1492.71/2000; reasoning 456.43/800
 - **pretrained · Video-MME**：Video-MME 分档正确率: short 60.0%; medium nan%; long nan%
 - **sft · MME**：perception 1536.30/2000; reasoning 457.14/800

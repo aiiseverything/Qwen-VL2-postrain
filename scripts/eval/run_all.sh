@@ -110,7 +110,10 @@ for d in $DATA; do
     # ★ 2026-09-29 修: 原来用 "$work/*/*_score*" —— 会被**别的模型的旧分数文件**骗过
     #   （扁平化的历史产物就在 <bench>/<model>/ 下），于是跑崩了也照样打 ✅。
     #   现在只看"这一轮真正写出的最新运行目录"。
-    newest_run=$(ls -1dt "$work"/*/T* 2>/dev/null | head -1)
+    # ★ 2026-09-30 修: 必须带尾斜杠只匹配**目录** —— 否则会匹配到 vlmeval 的
+    #   日志文件 logs/T<时间戳>_....log（它也是 T 开头），于是永远找不到分数 ✗
+    newest_run=$(ls -1dt "$work"/*/T*/ 2>/dev/null | head -1)
+    [[ -n "$newest_run" ]] && newest_run="${newest_run%/}"
     if [[ -n "$newest_run" ]] && compgen -G "$newest_run/*_score*" >/dev/null; then
       touch "$DONE_FILE"; log "✅ $d 完成"
     else

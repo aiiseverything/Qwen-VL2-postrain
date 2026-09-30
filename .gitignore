@@ -2,7 +2,9 @@
 models/
 data/raw/
 data/processed/
-data/cache/          # ★ 2026-09-29: tokenized 数据集(2.7GB), 曾误提交导致 push 卡死
+# ★ 2026-09-29 误提交过一次: tokenized 数据集 2.7GB 被 add -A 扫进来,
+#   导致每次 push 都要在本地压缩 2.7GB ⇒ 几十秒~几分钟, 表现为"推送超时"。
+data/cache/
 third_party/
 results/checkpoints/
 results/eval/

@@ -30,6 +30,7 @@ MODEL_PATHS = {
                                                    #   回答，用同一套 prompt 评测天然吃亏
     "pretrained": "models/Qwen2-VL-2B-Instruct",
     "sft":        "results/checkpoints/sft",
+    "base_sft":   "results/checkpoints/base_sft",   # ★ 2026-09-30: base 线的 SFT 产物
     "sft_ep3":    "results/checkpoints/sft_ep3",   # ★ 2026-09-29: 在 SFT 上再训 1 epoch（共 3）
                                                    #   用于「多训一轮有没有收益」的对比分析
     "dpo":        "results/checkpoints/dpo",

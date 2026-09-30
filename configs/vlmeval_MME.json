@@ -1,8 +1,8 @@
 {
   "model": {
-    "base": {
+    "base_sft": {
       "class": "Qwen2VLChat",
-      "model_path": "/home/ml-user/workdir/project-2/models/Qwen2-VL-2B",
+      "model_path": "/home/ml-user/workdir/project-2/results/checkpoints/base_sft",
       "attn_implementation": "sdpa",
       "max_new_tokens": 2048,
       "verbose": false

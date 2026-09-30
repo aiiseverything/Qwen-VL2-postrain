@@ -24,7 +24,7 @@ EVAL_DIR = PROJECT_ROOT / "results/eval"
 OUT_MD = PROJECT_ROOT / "results/report.md"
 OUT_CSV = PROJECT_ROOT / "results/report.csv"
 
-MODELS = ["base", "pretrained", "sft", "sft_ep3", "dpo", "grpo"]
+MODELS = ["base", "base_sft", "pretrained", "sft", "sft_ep3", "dpo", "grpo"]
 BENCH = ["MME", "MathVista", "Video-MME"]
 
 # 报告里用的简称 -> VLMEvalKit 实际落盘的目录名（2026-09-29 实测）
@@ -38,6 +38,7 @@ BENCH_DIR = {"MME": "MME", "MathVista": "MathVista_MINI", "Video-MME": "Video-MM
 MODEL_DISPLAY = {
     "pretrained": "instruct(官方)",
     "base": "base(未指令微调)",
+    "base_sft": "base+sft",
     "sft": "sft",
     "sft_ep3": "sft_ep3",
     "dpo": "dpo",

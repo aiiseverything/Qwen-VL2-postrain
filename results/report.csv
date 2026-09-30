@@ -2,6 +2,9 @@ model,bench,score,delta_vs_base,detail,judging,source_file
 base,MME,,,,官方协议（是/否二元题，accuracy + accuracy+）,
 base,MathVista,,,,⚠️ **规则抽取判分（非官方）** —— 无 OpenAI API key，**分数不可与论文数字直接比较**（PLAN K6）,
 base,Video-MME,,,,VLMEvalKit 默认抽帧（本项目只评 `short` 档，即 3 分钟以内）；⚠️ 四个模型必须用**同一抽帧策略**。**实测判分模型可换**：09-23 用 gpt-4o-mini、09-29 用 gpt-5.5，`short overall` 同为 0.600 ⇒ 换判分模型不改变可比性,
+base_sft,MME,1418.3096238495398,-74.403,perception 1418.31/2000; reasoning 377.86/800,官方协议（是/否二元题，accuracy + accuracy+）,base_sft_MME_score.csv
+base_sft,MathVista,43.6,-5.6,,⚠️ **规则抽取判分（非官方）** —— 无 OpenAI API key，**分数不可与论文数字直接比较**（PLAN K6）,status.json
+base_sft,Video-MME,58.199999999999996,-1.8,Video-MME 分档正确率: short 58.2%; medium nan%; long nan%,VLMEvalKit 默认抽帧（本项目只评 `short` 档，即 3 分钟以内）；⚠️ 四个模型必须用**同一抽帧策略**。**实测判分模型可换**：09-23 用 gpt-4o-mini、09-29 用 gpt-5.5，`short overall` 同为 0.600 ⇒ 换判分模型不改变可比性,base_sft_Video-MME_16frame_score_gpt-5.5.json
 pretrained,MME,1492.7122849139655,0.0,perception 1492.71/2000; reasoning 456.43/800,官方协议（是/否二元题，accuracy + accuracy+）,pretrained_MME_score.csv
 pretrained,MathVista,49.2,0.0,,⚠️ **规则抽取判分（非官方）** —— 无 OpenAI API key，**分数不可与论文数字直接比较**（PLAN K6）,status.json
 pretrained,Video-MME,60.0,0.0,Video-MME 分档正确率: short 60.0%; medium nan%; long nan%,VLMEvalKit 默认抽帧（本项目只评 `short` 档，即 3 分钟以内）；⚠️ 四个模型必须用**同一抽帧策略**。**实测判分模型可换**：09-23 用 gpt-4o-mini、09-29 用 gpt-5.5，`short overall` 同为 0.600 ⇒ 换判分模型不改变可比性,pretrained_Video-MME_16frame_score_gpt-5.5.json
